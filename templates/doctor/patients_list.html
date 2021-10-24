@@ -7,22 +7,21 @@
     <title>Start</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
     <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/myedits.css') }}" />
+
 </head>
 
 <body>
     <section class="hero is-fullheight">
 
-        {% include 'navbar.html' %}
+        {% include 'doctor/navbar.html' %}
 
         <div class="hero-body">
             <div class="container has-text-centered">
                 <p class="title">
-                    Witaj użytkowniku <b>{{g.user}}</b>
+                    Witaj użytkowniku <b>{{ username }}</b>
                 </p>
-                <p class="subtitle">
-                    Twoje ID to #{{g.id}}
-                </p>
-                <span class="tag is-light is-rounded">{{g.credential}}</p>
+                <span class="tag is-light is-rounded">{{credentials}}</p>
         </div>
       </div>
     </section>

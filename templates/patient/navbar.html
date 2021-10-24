@@ -3,31 +3,45 @@
         <nav class="navbar" role="navigation" aria-label="main navigation">
             <div class="container">
 
-                <div class="navbar-brand">
-                    <span class="navbar-item">
-            <span class="icon">
-              <a href="/menu" class="button is-info is-light">
-                <i class="fas fa-tooth fa-2x"></i>
-              </a>
-            </span>
-                    </span>
-
-                    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
-                        <span aria-hidden="true"></span>
-                        <span aria-hidden="true"></span>
-                        <span aria-hidden="true"></span>
-                    </a>
-
-                </div>
 
                 <div id="navbarBasicExample" class="navbar-menu">
                     <div class="navbar-end">
 
-                        {% if g.credential == "admin" %} {% include 'navbar_admin.html' %} {% endif %}
+                        <span class="navbar-item">
+                            <span class="icon">
+                              <a href="/start/{{username}}" class="button is-info is-light">
+                                <i class="fas fa-tooth fa-2x"></i>
+                              </a>
+                            </span>
+                                    </span>
+                        <span class="navbar-item">
+                            <a href="/start" class="button is-info is-inverted">
+                                <span>Cennik</span>
+                             </a>
+                        </span>
 
                         <span class="navbar-item">
-                            <a href="/stats" class="button is-info is-inverted">
+                            <a href="/myprofile" class="button is-info is-inverted">
                                 <span>Zaplanowane wizyty</span>
+                           </a>
+                        </span>
+
+                        
+                        <span class="navbar-item">
+                            <a href="/stats" class="button is-info is-inverted">
+                                <span>Zdjęcia/RTV</span>
+                             </a>
+                        </span>
+
+                        <span class="navbar-item">
+                            <a href="/myprofile" class="button is-info is-inverted">
+                                <span>Dokumentacja medyczna</span>
+                           </a>
+                        </span>
+                        
+                        <span class="navbar-item">
+                            <a href="/stats" class="button is-info is-inverted">
+                                <span>Skrzynka odbiorcza</span>
                              </a>
                         </span>
 
@@ -37,34 +51,9 @@
                            </a>
                         </span>
 
-                        
-                        <span class="navbar-item">
-                            <a href="/stats" class="button is-info is-inverted">
-                                <span>Zdjecia/RTG</span>
-                             </a>
-                        </span>
 
                         <span class="navbar-item">
-                            <a href="/myprofile" class="button is-info is-inverted">
-                                <span>Skrzynka odbiorcza</span>
-                           </a>
-                        </span>
-                        
-                        <span class="navbar-item">
-                            <a href="/stats" class="button is-info is-inverted">
-                                <span>Dokumentacja medyczna</span>
-                             </a>
-                        </span>
-
-                        <span class="navbar-item">
-                            <a href="/myprofile" class="button is-info is-inverted">
-                                <span>Cennik</span>
-                           </a>
-                        </span>
-
-
-                        <span class="navbar-item">
-              <a href="/login" class="button is-info">
+              <a href="/" class="button is-info">
                 <span class="icon">
                   <i class="fas fa-sign-out-alt"></i>
                 </span>

@@ -1,0 +1,77 @@
+<div class="hero-head">
+    <div class="box">
+        <nav class="navbar" role="navigation" aria-label="main navigation">
+            <div class="container">
+
+
+                <div id="navbarBasicExample" class="navbar-menu">
+                    <div class="navbar-end">
+
+                        <span class="navbar-item">
+                            <span class="icon">
+                              <a href="{{ url_for('start', username=username) }}" class="button is-info is-light">
+                                <i class="fas fa-tooth fa-2x"></i>
+                              </a>
+                            </span>
+                                    </span>
+                        <span class="navbar-item">
+                            <a href="/start" class="button is-info is-inverted">
+                                <span>Informacje o gabinecie</span>
+                             </a>
+                        </span>
+
+                        <span class="navbar-item">
+                            <a href="/myprofile" class="button is-info is-inverted">
+                                <span>Zaplanowane wizyty</span>
+                           </a>
+                        </span>
+
+
+                        <div class="navbar-item has-dropdown is-hoverable is-info">
+                            <a class="navbar-link">
+                              Pacjenci/Lekarze
+                            </a>
+                    
+                            <div class="navbar-dropdown">
+                              <a href="{{ url_for('add_patients_doctors', username=username) }}" class="navbar-item">
+                                Dodaj pacjenta/lekarza
+                              </a>
+                              <a href="{{ url_for('patients_list', username=username) }}" class="navbar-item">
+                                Lista pacjentów
+                              </a>
+                            </div>
+                          </div>
+
+                        <span class="navbar-item">
+                            <a href="/myprofile" class="button is-info is-inverted">
+                                <span>Grafik zmian</span>
+                           </a>
+                        </span>
+                        
+                        <span class="navbar-item">
+                            <a href="/stats" class="button is-info is-inverted">
+                                <span>Skrzynka odbiorcza</span>
+                             </a>
+                        </span>
+
+                        <span class="navbar-item">
+                            <a href="/myprofile" class="button is-info is-inverted">
+                                <span>Mój profil</span>
+                           </a>
+                        </span>
+
+
+                        <span class="navbar-item">
+              <a href="/" class="button is-info">
+                <span class="icon">
+                  <i class="fas fa-sign-out-alt"></i>
+                </span>
+                        <span>Wyloguj</span>
+                        </a>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </div>
+</div>

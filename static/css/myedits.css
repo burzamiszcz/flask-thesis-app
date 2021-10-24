@@ -1,0 +1,20 @@
+.hero.is-white {
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-image: linear-gradient(#fafafa, #fafafa66),
+                    url(https://files.clickweb.home.pl/e0/0d/e00d8de7-332d-48ec-9aa5-21aef3042c8e.jpg);
+    color: #0a0a0a;
+;
+}
+
+.hero.is-fullheight {
+    align-items: center;
+    display: flex;
+    background-image: linear-gradient(#ffffff, #fafafa66),url(https://files.clickweb.home.pl/e0/0d/e00d8de7-332d-48ec-9aa5-21aef3042c8e.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.navbar-item, .navbar-link {
+color: #3e8ed0;
+}

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Start</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/myedits.css') }}" />
+
+</head>
+
+<body>
+    <section class="hero is-fullheight">
+
+        {% include 'doctor/navbar.html' %}
+
+        <div class="hero-body">
+            <div class="container">
+                <div class="box main">
+                    <form method="POST">
+
+                        <div class="field">
+                            <label class="label">Imię i nazwisko</label>
+                            <div class="columns">
+                                <div class="column">
+                                    <div class="control has-icons-left">
+                                        <input class="input" type="text" name="name" placeholder="Imię">
+                                        <span class="icon is-small is-left">
+                                            <i class="fas fa-user"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="column">
+                                    <div class="control has-icons-left">
+                                        <input class="input" type="text" name="surname" placeholder="Nazwisko">
+                                        <span class="icon is-small is-left">
+                                            <i class="fas fa-user"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label class="label">PESEL</label>
+                            <div class="control has-icons-left">
+                                <input class="input" type="text" name="pesel">
+                                <span class="icon is-small is-left">
+                                    <i class="fas fa-id-card"></i>
+                                </span>
+                            </div>
+                        </div>
+
+                        
+                        <div class="field">
+                            <label class="label">Adres</label>
+                            <div class="columns">
+                                <div class="column">
+                                    <div class="control has-icons-left">
+                                        <input class="input" type="text" name="city" placeholder="Miasto">
+                                        <span class="icon is-small is-left">
+                                            <i class="fas fa-home"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="column">
+                                    <div class="control has-icons-left">
+                                        <input class="input" type="text" name="street" placeholder="Ulica">
+                                        <span class="icon is-small is-left">
+                                            <i class="fas fa-home"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label class="label">Numer telefonu</label>
+                            <div class="control has-icons-left">
+                                <input class="input" type="text" name="phone_number" value="+48 ">
+                                <span class="icon is-small is-left">
+                                    <i class="fas fa-phone"></i>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="field is-fullwidth">
+                            <label class="label">Wybierz uprawnienia</label>
+                            <div class="select is-fullwidth">
+                                <select name="credential">
+                                    <option>Pacjent</option>
+                                    <option>Lekarz</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <p class="control">
+                                <button type="submit" class="button is-info is-fullwidth">
+                                      Utwórz konto
+                                </button>
+                            </p>
+                        </div>
+                    </form>
+    
+    
+                </div>
+            </div>
+        </div>
+    </section>
+  </body>
+</html>
