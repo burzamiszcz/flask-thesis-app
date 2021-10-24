@@ -1,18 +1,23 @@
 from flask import (Flask,
                     render_template,
                     request,
-                    redirect)
+                    redirect,
+                    session)
 from flask.helpers import url_for
 
 app = Flask(__name__)
 
+app.secret_key = 'super secret key'
 
-admin_username, admin_password = 'admin', 'admin'
+admin_username, admin_password, credentials = 'admin', 'admin', 'admin'
+
 @app.route('/', methods=['GET', 'POST'])
 def main():
+    session.clear()
     if request.method == 'POST':
         username = request.form['username'].lower()
         password = request.form['password']
+        session['username'] = username
         if username == admin_username and password == admin_password:
             print(username)
             return redirect(url_for('start', username = username))
@@ -20,7 +25,10 @@ def main():
             pass
     return render_template('login.html')
 
-@app.route('/<username>')
+@app.route('/start/<username>')
 def start(username):
-    username=username
-    return render_template('start.html')
+    if session['username'] != username:
+        return redirect(url_for('main'))
+
+    username = session['username']
+    return render_template('start.html', username = username)
