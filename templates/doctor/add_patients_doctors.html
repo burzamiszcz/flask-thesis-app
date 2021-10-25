@@ -18,7 +18,7 @@
 
         <div class="hero-body">
             <div class="container">
-                <div class="box main">
+                <div class="box main" style="max-width: 700px;">
                     <form method="POST">
 
                         <div class="field">
@@ -44,12 +44,24 @@
                         </div>
 
                         <div class="field">
-                            <label class="label">PESEL</label>
-                            <div class="control has-icons-left">
-                                <input class="input" type="text" name="pesel">
-                                <span class="icon is-small is-left">
-                                    <i class="fas fa-id-card"></i>
-                                </span>
+                            <label class="label">PESEL i Narodowość</label>
+                            <div class="columns">
+                                <div class="column">
+                                    <div class="control has-icons-left">
+                                        <input class="input" type="text" name="pesel" placeholder="PESEL">
+                                        <span class="icon is-small is-left">
+                                            <i class="fas fa-id-card"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="column">
+                                    <div class="control has-icons-left">
+                                        <input class="input" type="text" name="country" placeholder="Narodowość">
+                                        <span class="icon is-small is-left">
+                                            <i class="fas fa-globe"></i>
+                                        </span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
@@ -61,13 +73,21 @@
                                     <div class="control has-icons-left">
                                         <input class="input" type="text" name="city" placeholder="Miasto">
                                         <span class="icon is-small is-left">
-                                            <i class="fas fa-home"></i>
+                                            <i class="fas fa-city"></i>
                                         </span>
                                     </div>
                                 </div>
                                 <div class="column">
                                     <div class="control has-icons-left">
                                         <input class="input" type="text" name="street" placeholder="Ulica">
+                                        <span class="icon is-small is-left">
+                                            <i class="fas fa-home"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="column is-one-quarter">
+                                    <div class="control has-icons-left">
+                                        <input class="input" type="text" name="street_number" placeholder="Nr domu/mieszkania">
                                         <span class="icon is-small is-left">
                                             <i class="fas fa-home"></i>
                                         </span>
@@ -82,6 +102,16 @@
                                 <input class="input" type="text" name="phone_number" value="+48 ">
                                 <span class="icon is-small is-left">
                                     <i class="fas fa-phone"></i>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label class="label">E-mail</label>
+                            <div class="control has-icons-left">
+                                <input class="input" type="text" name="email">
+                                <span class="icon is-small is-left">
+                                    <i class="fas fa-envelope"></i>
                                 </span>
                             </div>
                         </div>

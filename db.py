@@ -6,6 +6,6 @@ c = conn.cursor()
 # c.execute('DROP TABLE persons')
 
 c.execute('''CREATE TABLE persons
-             (name TEXT,surname TEXT, pesel INTEGER, city TEXT, street TEXT,  phone_number TEXT, credentials TEXT, password TEXT)''')
+             (name TEXT,surname TEXT, pesel INTEGER, city TEXT, street TEXT, street_number TEXT,  phone_number TEXT, credentials TEXT, country TEXT, email TEXT, password TEXT)''')
 conn.commit()
 conn.close()

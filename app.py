@@ -88,6 +88,9 @@ def add_patients_doctors():
         street = request.form['street']
         phone_number = request.form['phone_number']
         credential = request.form['credential']
+        country = request.form['country']
+        email = request.form['email']
+        street_number = request.form['street_number']
         if credential == "Pacjent":
             credential = 'patient'
         elif credential == "Lekarz":
@@ -98,7 +101,10 @@ def add_patients_doctors():
                                                     "city": city,
                                                     "street": street,
                                                     "phone_number": phone_number,
-                                                    "credential": credential})
+                                                    "credential": credential,
+                                                    "country": country,
+                                                    "email": email,
+                                                    "street_number": street_number})
         if response.json()['status'] == 'ok':
             print(response.json())
 
@@ -114,9 +120,12 @@ def add_user():
         street = request.json['street']
         phone_number = request.json['phone_number']
         credential = request.json['credential']
+        country = request.json['country']
+        email = request.json['email']
+        street_number = request.json['street_number']
         conn = sqlite3.connect('databases/database.db')
         c = conn.cursor()
-        c.execute(f'INSERT INTO persons VALUES (\'{name}\', \'{surname}\', {pesel}, \'{city}\', \'{street}\', \'{phone_number}\', \'{credential}\', \'zmienhaslo1\')')
+        c.execute(f'INSERT INTO persons VALUES (\'{name}\', \'{surname}\', {pesel}, \'{city}\', \'{street}\',\'{street_number}\', \'{phone_number}\', \'{credential}\', \'{country}\', \'{email}\', \'zmienhaslo1\')')
         conn.commit()
         conn.close()
         
