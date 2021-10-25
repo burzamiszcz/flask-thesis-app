@@ -8,6 +8,27 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
     <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/myedits.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/table.css') }}" />
+
+
+    <script>
+          function myFunction() {
+          var input = document.getElementById("myInput");
+          var filter = input.value.toUpperCase();
+          var table = document.getElementById("myTable");
+          var trs = table.tBodies[0].getElementsByTagName("tr");
+          for (var i = 0; i < trs.length; i++) {
+            var tds = trs[i].getElementsByTagName("td");
+            trs[i].style.display = "none";
+            for (var i2 = 0; i2 < tds.length; i2++) {
+              if (tds[i2].innerHTML.toUpperCase().indexOf(filter) > -1) {
+                trs[i].style.display = "";
+                continue;
+              }
+            }
+          }
+        }
+    </script>
 
 </head>
 
@@ -18,10 +39,25 @@
 
         <div class="hero-body">
             <div class="container has-text-centered">
-                <p class="title">
-                    Witaj użytkowniku <b>{{ username }}</b>
-                </p>
-                <span class="tag is-light is-rounded">{{credentials}}</p>
+              <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Wyszukaj..">
+
+              <table id="myTable">
+                <tr class="header">
+                  <th>Imie</th>
+                  <th>Nazwisko</th>
+                  <th>Pesel</th>
+                  <th>Miasto</th>
+                  <th>Ulica</th>
+                  <th>Numer telefonu</th>
+                </tr>
+                {% for row in list %}
+                <tr>
+                  {% for cell in row %}
+                  <td>{{cell}}</td>
+                  {% endfor %}
+                </tr>
+                {% endfor %}
+              </table> 
         </div>
       </div>
     </section>
