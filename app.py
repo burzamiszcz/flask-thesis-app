@@ -74,6 +74,32 @@ def start():
     else:
         return redirect(url_for('main'))
 
+@app.route('/office', methods=['POST', 'GET'])
+def office():
+    list_office = []
+    conn = sqlite3.connect('databases/database.db')
+    c = conn.cursor()
+    office = c.execute(f'SELECT * FROM office')
+    for row in office.fetchall():
+        list_office.append(row)
+    print(list_office)
+
+    if request.method == "POST":
+        name = request.form['name']
+        city = request.form['city']
+        street = request.form['street']
+        street_number = request.form['street_number']
+        phone_number = request.form['phone_number']
+        email = request.form['email']
+        conn = sqlite3.connect('databases/database.db')
+        c = conn.cursor()
+        c.execute(f'DELETE FROM office')
+        conn.commit()
+        c.execute(f'INSERT INTO office VALUES (\'{name}\', \'{city}\', \'{street}\',\'{street_number}\', \'{phone_number}\', \'{email}\')')
+        conn.commit()
+        conn.close()
+    return render_template('doctor/office.html', username=session['username'], list_office=list_office[0])
+        
 
 @app.route('/add_patients_doctors', methods=['POST', 'GET'])
 def add_patients_doctors():

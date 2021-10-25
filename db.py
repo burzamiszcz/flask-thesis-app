@@ -5,7 +5,16 @@ c = conn.cursor()
 # Utwórz tabelę
 # c.execute('DROP TABLE persons')
 
-c.execute('''CREATE TABLE persons
-             (name TEXT,surname TEXT, pesel INTEGER, city TEXT, street TEXT, street_number TEXT,  phone_number TEXT, credentials TEXT, country TEXT, email TEXT, password TEXT)''')
-conn.commit()
-conn.close()
+def person():
+    c.execute('''CREATE TABLE persons
+                (name TEXT,surname TEXT, pesel INTEGER, city TEXT, street TEXT, street_number TEXT,  phone_number TEXT, credentials TEXT, country TEXT, email TEXT, password TEXT)''')
+    conn.commit()
+    conn.close()
+
+def office():
+    c.execute('''CREATE TABLE office
+                (name TEXT, city TEXT, street TEXT, street_number TEXT,  phone_number TEXT, email TEXT)''')
+    conn.commit()
+    conn.close()
+
+office()
