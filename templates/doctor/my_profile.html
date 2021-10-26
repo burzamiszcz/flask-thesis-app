@@ -21,39 +21,21 @@
                     <form method="POST">
 
                         <div class="field">
-                            <label class="label">Nazwa gabinetu</label>
-                                <div class="control has-icons-left">
-                                    <input class="input" type="text" name="name" placeholder="Nazwa gabinetu" value="{{list_office[0]}}">
-                                    <span class="icon is-small is-left">
-                                        <i class="fas fa-user"></i>
-                                    </span>
-                                </div>
-                        </div>
-                   
-                        <div class="field">
-                            <label class="label">Adres</label>
+                            <label class="label">Imię i nazwisko</label>
                             <div class="columns">
                                 <div class="column">
                                     <div class="control has-icons-left">
-                                        <input class="input" type="text" name="city" placeholder="Miasto" value="{{list_office[1]}}">
+                                        <input class="input" type="text" name="name" placeholder="Imię" value={{person_info[0]}}>
                                         <span class="icon is-small is-left">
-                                            <i class="fas fa-city"></i>
+                                            <i class="fas fa-user"></i>
                                         </span>
                                     </div>
                                 </div>
                                 <div class="column">
                                     <div class="control has-icons-left">
-                                        <input class="input" type="text" name="street" placeholder="Ulica" value="{{list_office[2]}}">
+                                        <input class="input" type="text" name="surname" placeholder="Nazwisko" value={{person_info[1]}}>
                                         <span class="icon is-small is-left">
-                                            <i class="fas fa-home"></i>
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="column is-one-quarter">
-                                    <div class="control has-icons-left">
-                                        <input class="input" type="text" name="street_number" placeholder="Nr domu/mieszkania" value="{{list_office[3]}}">
-                                        <span class="icon is-small is-left">
-                                            <i class="fas fa-home"></i>
+                                            <i class="fas fa-user"></i>
                                         </span>
                                     </div>
                                 </div>
@@ -63,7 +45,7 @@
                         <div class="field">
                             <label class="label">Numer telefonu</label>
                             <div class="control has-icons-left">
-                                <input class="input" type="text" name="phone_number" value="{{list_office[4]}}">
+                                <input class="input" type="text" name="phone_number" value={{person_info[6]}}>
                                 <span class="icon is-small is-left">
                                     <i class="fas fa-phone"></i>
                                 </span>
@@ -73,7 +55,7 @@
                         <div class="field">
                             <label class="label">E-mail</label>
                             <div class="control has-icons-left">
-                                <input class="input" type="text" name="email" value="{{list_office[5]}}">
+                                <input class="input" type="text" name="email"  value={{person_info[9]}}>
                                 <span class="icon is-small is-left">
                                     <i class="fas fa-envelope"></i>
                                 </span>
@@ -83,7 +65,7 @@
                         <div class="field">
                             <p class="control">
                                 <button type="submit" class="button is-info is-fullwidth">
-                                      Zapisz zmiany
+                                      Edytuj moje dane
                                 </button>
                             </p>
                         </div>

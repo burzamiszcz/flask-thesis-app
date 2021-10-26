@@ -33,12 +33,17 @@
                             </a>
                     
                             <div class="navbar-dropdown">
-                              <a href="{{ url_for('add_patients_doctors', username=username) }}" class="navbar-item">
-                                Dodaj pacjenta/lekarza
+                              <a href="{{ url_for('add_patients', username=username) }}" class="navbar-item">
+                                Dodaj pacjenta
                               </a>
+                              <a href="{{ url_for('add_doctors', username=username) }}" class="navbar-item">
+                                Dodaj lekarza/Lista lekarzy
+                              </a>
+                              
                               <a href="{{ url_for('patients_list', username=username) }}" class="navbar-item">
                                 Lista pacjentów
                               </a>
+
                             </div>
                           </div>
 
@@ -55,7 +60,7 @@
                         </span>
 
                         <span class="navbar-item">
-                            <a href="/myprofile" class="button is-info is-inverted">
+                            <a href="{{ url_for('my_profile', username=username) }}"  class="button is-info is-inverted">
                                 <span>Mój profil</span>
                            </a>
                         </span>

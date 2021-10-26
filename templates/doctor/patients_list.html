@@ -22,7 +22,7 @@ var input, filter, table, tr, i, j, column_length, count_td;
       tr = table.getElementsByTagName("tr");
       for (i = 1; i < tr.length; i++) { // except first(heading) row
         count_td = 0;
-        for(j = 0; j < column_length-1; j++){ // except first column
+        for(j = 0; j < column_length; j++){ // except first column
             td = tr[i].getElementsByTagName("td")[j];
             /* ADD columns here that you want you to filter to be used on */
             if (td) {
@@ -65,14 +65,17 @@ var input, filter, table, tr, i, j, column_length, count_td;
                   <th style="width: 15%;">Nazwisko</th>
                   <th style="width: 15%;">Pesel</th>
                   <th style="width: 15%;">Miasto</th>
-                  <th style="width: 23%;">Ulica</th>
-                  <th style="width: 20%;">Numer telefonu</th>
+                  <th style="width: 12%;">Ulica</th>
+                  <th style="width: 7%;">Nr</th>
+                  <th style="width: 18%;">Numer telefonu</th>
+                  <th hidden>Kumulacja</th>
                 </tr>
                 {% for row in list %}
                 <tr>
                   {% for cell in row %}
                   <td>{{cell}}</td>
                   {% endfor %}
+                  <td hidden>{{row[0]}} {{row[1]}}</td>
                 </tr>
                 {% endfor %}
               </table> 

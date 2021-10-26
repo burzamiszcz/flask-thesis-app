@@ -1,13 +1,19 @@
 import sqlite3
 
-conn = sqlite3.connect(r'C:\Users\BUH8TW\Desktop\thesis\thesis-application\databases\database.db')
+conn = sqlite3.connect('.\\databases\\database.db')
 c = conn.cursor()
 # Utwórz tabelę
 # c.execute('DROP TABLE persons')
 
-def person():
-    c.execute('''CREATE TABLE persons
+def patients():
+    c.execute('''CREATE TABLE patients
                 (name TEXT,surname TEXT, pesel INTEGER, city TEXT, street TEXT, street_number TEXT,  phone_number TEXT, credentials TEXT, country TEXT, email TEXT, password TEXT)''')
+    conn.commit()
+    conn.close()
+
+def doctors():
+    c.execute('''CREATE TABLE doctors
+                (name TEXT, surname TEXT, phone_number TEXT, credentials TEXT, email TEXT, password TEXT)''')
     conn.commit()
     conn.close()
 
@@ -17,4 +23,4 @@ def office():
     conn.commit()
     conn.close()
 
-office()
+doctors()
