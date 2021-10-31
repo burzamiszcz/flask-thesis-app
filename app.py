@@ -120,7 +120,7 @@ def add_patients():
         
         conn = sqlite3.connect('databases/database.db')
         c = conn.cursor()
-        c.execute(f'INSERT INTO patients VALUES (\'{name}\', \'{surname}\', {pesel}, \'{city}\', \'{street}\',\'{street_number}\', \'{phone_number}\', \'{credential}\', \'{country}\', \'{email}\', \'{pesel}\')')
+        c.execute(f'INSERT INTO persons VALUES (\'{name}\', \'{surname}\', {pesel}, \'{city}\', \'{street}\',\'{street_number}\', \'{phone_number}\', \'{credential}\', \'{country}\', \'{email}\', \'{pesel}\')')
         conn.commit()
         conn.close()
 
@@ -161,10 +161,14 @@ def patients_list():
     list = []
     conn = sqlite3.connect('databases/database.db')
     c = conn.cursor()
-    user_list = c.execute(f'SELECT name, surname, pesel, city, street, street_number, phone_number FROM persons WHERE credentials=\'patient\'')
+    user_list = c.execute(f'SELECT id, name, surname, pesel, city, street, street_number, phone_number FROM persons WHERE credentials=\'patient\'')
     for row in user_list.fetchall():
         list.append(row)
     return render_template('doctor/patients_list.html', username = session['username'], list=list)
+
+@app.route('/patient_info/<patient_id>')
+def patient_info(patient_id):
+    return render_template('doctor/patient_info')
     
 
 @app.route('/user_list', methods = ['GET', 'POST'])

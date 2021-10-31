@@ -24,6 +24,7 @@
   #myTable tr {
     /* Add a bottom border to all table rows */
     border-bottom: 1px solid #ddd;
+    cursor: pointer;
   }
   
   #myTable tr.header, #myTable tr:hover {

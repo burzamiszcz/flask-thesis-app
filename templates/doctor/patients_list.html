@@ -61,9 +61,10 @@ var input, filter, table, tr, i, j, column_length, count_td;
               <!-- <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Wyszukaj.."> -->
               <table id="myTable">
                 <tr class="header">
-                  <th style="width: 12%;">Imie</th>
-                  <th style="width: 15%;">Nazwisko</th>
-                  <th style="width: 15%;">Pesel</th>
+                  <th style="width: 3%;">ID</th>
+                  <th style="width: 13%;">Imie</th>
+                  <th style="width: 13%;">Nazwisko</th>
+                  <th style="width: 13%;">Pesel</th>
                   <th style="width: 15%;">Miasto</th>
                   <th style="width: 12%;">Ulica</th>
                   <th style="width: 7%;">Nr</th>
@@ -71,7 +72,7 @@ var input, filter, table, tr, i, j, column_length, count_td;
                   <th hidden>Kumulacja</th>
                 </tr>
                 {% for row in list %}
-                <tr>
+                <tr onClick="window.location.replace('/{{row[0]}}')">
                   {% for cell in row %}
                   <td>{{cell}}</td>
                   {% endfor %}
@@ -80,6 +81,14 @@ var input, filter, table, tr, i, j, column_length, count_td;
                 {% endfor %}
               </table> 
         </div>
+
+<script>
+
+function goToLink(){
+  pass;
+};
+
+</script>
       <!-- </div> -->
     </section>
   </body>
