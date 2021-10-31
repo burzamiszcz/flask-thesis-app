@@ -166,9 +166,47 @@ def patients_list():
         list.append(row)
     return render_template('doctor/patients_list.html', username = session['username'], list=list)
 
-@app.route('/patient_info/<patient_id>')
+@app.route('/patient_info/<patient_id>', methods=['POST', 'GET'])
 def patient_info(patient_id):
-    return render_template('doctor/patient_info')
+    patient_info = []
+    tooth_info = []
+    teethd = [['ld8', 'ld7', 'ld6', 'ld5', 'ld4', 'ld3', 'ld2', 'ld1'], ['pd1', 'pd2', 'pd3', 'pd4', 'pd5', 'pd6', 'pd7', 'pd8']]
+    teethg = [['lg8', 'lg7', 'lg6', 'lg5', 'lg4', 'lg3', 'lg2', 'lg1'], ['pg1', 'pg2', 'pg3', 'pg4', 'pg5', 'pg6', 'pg7', 'pg8']]
+
+
+    conn = sqlite3.connect('databases/database.db')
+    c = conn.cursor()
+    for tooth in teethd:
+        for elem in tooth:
+           c.execute(f'INSERT INTO teeth VALUES ({patient_id}, \'{elem}\', 2)')
+    
+    for tooth in teethg:
+        for elem in tooth:
+           c.execute(f'INSERT INTO teeth VALUES ({patient_id}, \'{elem}\', 2)')
+    conn.commit()
+    patient = c.execute(f'SELECT * FROM persons WHERE id = "{patient_id}"')
+    for row in patient.fetchall():
+        patient_info.append(row)
+
+    teeth = c.execute(f'SELECT tooth, status FROM teeth WHERE patient_id = "{patient_id}"')
+    teeth_dict = {}
+    for tooth in teeth:
+        teeth_dict[tooth[0]] = tooth[1]
+    print(teeth_dict)
+    # for tooth in teeth:
+    #     tooth_info.append(tooth)
+    # print(tooth_info)
+    # c.execute(f'INSERT INTO teeth VALUES (\'{patient_id}\', ')
+
+
+    if request.method == "POST":
+        for tooth_info in request.form:
+            print(patient_id, tooth_info, request.form[tooth_info])
+            # c.execute(f'DELETE FROM teeth WHERE patient_id = {patient_id}')
+            c.execute(f'INSERT INTO teeth VALUES ({patient_id}, \'{tooth_info}\', {request.form[tooth_info]})')
+            conn.commit()
+
+    return render_template('doctor/patient_info.html', patient_info=patient_info[0], teethg = teethg, teethd = teethd, teeth_dict = teeth_dict)
     
 
 @app.route('/user_list', methods = ['GET', 'POST'])

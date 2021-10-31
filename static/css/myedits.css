@@ -18,3 +18,8 @@
 .navbar-item, .navbar-link {
 color: #3e8ed0;
 }
+
+hr.rounded {
+    border-top: 8px solid #bbb;
+    border-radius: 5px;
+  }

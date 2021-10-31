@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
     <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/myedits.css') }}" />
+    <script defer src="{{ url_for('static', filename='js/bulma_modal.js') }}"></script>
+
 
 </head>
 
@@ -16,8 +18,227 @@
 
         {% include 'doctor/navbar.html' %}
 
-            <div class="container">
-                <div class="box main" style="max-width: 700px; margin-top: 10px;">
+            <div class="container is-fullwidth">
+
+                <div class="box" style="margin-top: 15px;">
+                    <div class="columns">
+                        {% for side in teethg %}
+                            {% for tooth in side %}
+                                {% if teeth_dict[tooth] == 1 %}
+                                    <div class="column">
+                                        <figure class="image is-48x48">
+                                            <img src="{{ url_for('static', filename='teeth/' + tooth + '.png') }}" style="filter: grayscale(100%) brightness(40%) sepia(100%) hue-rotate(-50deg) saturate(600%) contrast(0.8);">
+                                        </figure>
+                                    </div>
+                                {% endif %}
+                                {% if teeth_dict[tooth] == 2 %}
+                                    <div class="column">
+                                        <figure class="image is-48x48">
+                                            <img src="{{ url_for('static', filename='teeth/' + tooth + '.png') }}">
+                                        </figure>
+                                    </div>
+                                {% endif %}
+                                {% if teeth_dict[tooth] == 3 %}
+                                    <div class="column">
+                                        <figure class="image is-48x48">
+                                            <img src="{{ url_for('static', filename='teeth/' + tooth + '.png') }}" style="filter: grayscale(100%) brightness(60%) sepia(191%) hue-rotate(-708deg) saturate(600%) contrast(0.8);">
+                                        </figure>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        {% endfor %}
+                    </div>
+
+                    <div class="columns">
+                        {% for side in teethd %}
+                            {% for tooth in side %}
+                                {% if teeth_dict[tooth] == 1 %}
+                                    <div class="column">
+                                        <figure class="image is-48x48">
+                                            <img src="{{ url_for('static', filename='teeth/' + tooth + '.png') }}" style="filter: grayscale(100%) brightness(40%) sepia(100%) hue-rotate(-50deg) saturate(600%) contrast(0.8);">
+                                        </figure>
+                                    </div>
+                                {% endif %}
+                                {% if teeth_dict[tooth] == 2 %}
+                                    <div class="column">
+                                        <figure class="image is-48x48">
+                                            <img src="{{ url_for('static', filename='teeth/' + tooth + '.png') }}">
+                                        </figure>
+                                    </div>
+                                {% endif %}
+                                {% if teeth_dict[tooth] == 3 %}
+                                    <div class="column">
+                                        <figure class="image is-48x48">
+                                            <img src="{{ url_for('static', filename='teeth/' + tooth + '.png') }}" style="filter: grayscale(100%) brightness(60%) sepia(191%) hue-rotate(-708deg) saturate(600%) contrast(0.8);">
+                                        </figure>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        {% endfor %}
+                    </div>
+
+                </div>
+                <div class="field">
+                    <p class="control has-text-centered">
+                        <button id="btn" type="submit" class="button is-ghost is-centered" style="margin-left: auto; margin-right: auto;">
+                              Edytuj status uzębienia
+                        </button>
+                    </p>
+                </div>
+
+                <div class="modal" id="myModal">
+                    <div class="modal-background"></div>
+                    <div class="modal-card" style="max-width: 450px;">
+                      <header class="modal-card-head">
+                        <p class="modal-card-title">Uzębienie</p>
+                        <button class="delete" aria-label="close" data-bulma-modal="close"></button>
+                      </header>
+                      <section class="modal-card-body">
+                            <form method="POST">
+                                
+                        {% for side in teethg %}
+                            {% for tooth in side %}
+                            <div class="columns">
+                                <div class="column">
+                                    <figure class="image is-48x48">
+                                        <img src="{{ url_for('static', filename='teeth/' + tooth + '.png') }}">
+                                    </figure>
+                                </div>
+                                <div class="column is-four-fifths">
+                                    {% if teeth_dict[tooth] == 1 %}
+                                    <div class="control">
+                                        <label class="radio">
+                                        <input type="radio" value="1" name="{{tooth}}" checked>
+                                        Do leczenia
+                                        </label>
+                                        <label class="radio">
+                                        <input type="radio" value="2" name="{{tooth}}">
+                                        Zdrowy
+                                        </label>
+                                        <label class="radio">
+                                            <input type="radio" value="3" name="{{tooth}}">
+                                            Obserwacja
+                                        </label>
+                                    </div>
+                                    {% endif %}
+
+                                    {% if teeth_dict[tooth] == 2 %}
+                                    <div class="control">
+                                        <label class="radio">
+                                        <input type="radio" value="1" name="{{tooth}}">
+                                        Do leczenia
+                                        </label>
+                                        <label class="radio">
+                                        <input type="radio" value="2" name="{{tooth}}" checked>
+                                        Zdrowy
+                                        </label>
+                                        <label class="radio">
+                                            <input type="radio" value="3" name="{{tooth}}">
+                                            Obserwacja
+                                        </label>
+                                    </div>
+                                    {% endif %}
+
+                                    {% if teeth_dict[tooth] == 3 %}
+                                    <div class="control">
+                                        <label class="radio">
+                                        <input type="radio" value="1" name="{{tooth}}">
+                                        Do leczenia
+                                        </label>
+                                        <label class="radio">
+                                        <input type="radio" value="2" name="{{tooth}}">
+                                        Zdrowy
+                                        </label>
+                                        <label class="radio">
+                                            <input type="radio" value="3" name="{{tooth}}" checked>
+                                            Obserwacja
+                                        </label>
+                                    </div>
+                                    {% endif %}
+
+                                </div>
+                            </div>
+                            {% endfor %}
+                        {% endfor %}
+                        <hr class="rounded">                        
+
+                        {% for side in teethd %}
+                                {% for tooth in side %}
+                                <div class="columns">
+                                    <div class="column">
+                                        <figure class="image is-48x48">
+                                            <img src="{{ url_for('static', filename='teeth/' + tooth + '.png') }}">
+                                        </figure>
+                                    </div>
+                                    <div class="column is-four-fifths">
+                                        {% if teeth_dict[tooth] == 1 %}
+                                        <div class="control">
+                                            <label class="radio">
+                                            <input type="radio" value="1" name="{{tooth}}" checked>
+                                            Do leczenia
+                                            </label>
+                                            <label class="radio">
+                                            <input type="radio" value="2" name="{{tooth}}">
+                                            Zdrowy
+                                            </label>
+                                            <label class="radio">
+                                                <input type="radio" value="3" name="{{tooth}}">
+                                                Obserwacja
+                                            </label>
+                                        </div>
+                                        {% endif %}
+
+                                        {% if teeth_dict[tooth] == 2 %}
+                                        <div class="control">
+                                            <label class="radio">
+                                            <input type="radio" value="1" name="{{tooth}}">
+                                            Do leczenia
+                                            </label>
+                                            <label class="radio">
+                                            <input type="radio" value="2" name="{{tooth}}" checked>
+                                            Zdrowy
+                                            </label>
+                                            <label class="radio">
+                                                <input type="radio" value="3" name="{{tooth}}">
+                                                Obserwacja
+                                            </label>
+                                        </div>
+                                        {% endif %}
+
+                                        {% if teeth_dict[tooth] == 3 %}
+                                        <div class="control">
+                                            <label class="radio">
+                                            <input type="radio" value="1" name="{{tooth}}">
+                                            Do leczenia
+                                            </label>
+                                            <label class="radio">
+                                            <input type="radio" value="2" name="{{tooth}}">
+                                            Zdrowy
+                                            </label>
+                                            <label class="radio">
+                                                <input type="radio" value="3" name="{{tooth}}" checked>
+                                                Obserwacja
+                                            </label>
+                                        </div>
+                                        {% endif %}
+
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            {% endfor %}
+                        
+                    </section>
+                      <footer class="modal-card-foot">
+                        <button class="button is-success" type="submit">Save changes</button>
+                    </form>
+                        <button class="button" data-bulma-modal="close">Cancel</button>
+                      </footer>
+                    </div>
+                  </div>
+
+            
+
+                <div class="box main" style="max-width: 700px; margin-top: 10px; margin-left: auto; margin-right: auto;">
                     <form method="POST">
 
                         <div class="field">
@@ -25,7 +246,7 @@
                             <div class="columns">
                                 <div class="column">
                                     <div class="control has-icons-left">
-                                        <input class="input" type="text" name="name" placeholder="Imię" value={{person_info[0]}}>
+                                        <input class="input" type="text" name="name" placeholder="Imię" value="{{patient_info[0]}}" disabled>
                                         <span class="icon is-small is-left">
                                             <i class="fas fa-user"></i>
                                         </span>
@@ -33,9 +254,62 @@
                                 </div>
                                 <div class="column">
                                     <div class="control has-icons-left">
-                                        <input class="input" type="text" name="surname" placeholder="Nazwisko" value={{person_info[1]}}>
+                                        <input class="input" type="text" name="surname" placeholder="Nazwisko" value="{{patient_info[1]}}" disabled>
                                         <span class="icon is-small is-left">
                                             <i class="fas fa-user"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label class="label">PESEL i Narodowość</label>
+                            <div class="columns">
+                                <div class="column">
+                                    <div class="control has-icons-left">
+                                        <input class="input" type="text" name="pesel" placeholder="PESEL" value="{{patient_info[2]}}" disabled>
+                                        <span class="icon is-small is-left">
+                                            <i class="fas fa-id-card"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="column">
+                                    <div class="control has-icons-left">
+                                        <input class="input" type="text" name="country" placeholder="Narodowość" value="{{patient_info[8]}}" disabled>
+                                        <span class="icon is-small is-left">
+                                            <i class="fas fa-globe"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        
+                        <div class="field">
+                            <label class="label">Adres</label>
+                            <div class="columns">
+                                <div class="column">
+                                    <div class="control has-icons-left">
+                                        <input class="input" type="text" name="city" placeholder="Miasto"  value="{{patient_info[3]}}" disabled>
+                                        <span class="icon is-small is-left">
+                                            <i class="fas fa-city"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="column">
+                                    <div class="control has-icons-left">
+                                        <input class="input" type="text" name="street" placeholder="Ulica"  value="{{patient_info[4]}}" disabled>
+                                        <span class="icon is-small is-left">
+                                            <i class="fas fa-home"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="column is-one-quarter">
+                                    <div class="control has-icons-left">
+                                        <input class="input" type="text" name="street_number" placeholder="Nr domu/mieszkania" value="{{patient_info[5]}}" disabled>
+                                        <span class="icon is-small is-left">
+                                            <i class="fas fa-home"></i>
                                         </span>
                                     </div>
                                 </div>
@@ -45,7 +319,7 @@
                         <div class="field">
                             <label class="label">Numer telefonu</label>
                             <div class="control has-icons-left">
-                                <input class="input" type="text" name="phone_number" value={{person_info[6]}}>
+                                <input class="input" type="text" name="phone_number" value="{{patient_info[6]}}" disabled>
                                 <span class="icon is-small is-left">
                                     <i class="fas fa-phone"></i>
                                 </span>
@@ -55,20 +329,14 @@
                         <div class="field">
                             <label class="label">E-mail</label>
                             <div class="control has-icons-left">
-                                <input class="input" type="text" name="email"  value={{person_info[9]}}>
+                                <input class="input" type="text" name="email"  value="{{patient_info[9]}}" disabled>
                                 <span class="icon is-small is-left">
                                     <i class="fas fa-envelope"></i>
                                 </span>
                             </div>
                         </div>
 
-                        <div class="field">
-                            <p class="control">
-                                <button type="submit" class="button is-info is-fullwidth">
-                                      Edytuj moje dane
-                                </button>
-                            </p>
-                        </div>
+
                     </form>
     
     

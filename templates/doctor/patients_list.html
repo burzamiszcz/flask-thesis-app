@@ -72,7 +72,7 @@ var input, filter, table, tr, i, j, column_length, count_td;
                   <th hidden>Kumulacja</th>
                 </tr>
                 {% for row in list %}
-                <tr onClick="window.location.replace('/{{row[0]}}')">
+                <tr onClick="window.location.replace('/patient_info/{{row[0]}}')">
                   {% for cell in row %}
                   <td>{{cell}}</td>
                   {% endfor %}
