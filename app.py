@@ -118,9 +118,10 @@ def add_patients():
         email = request.form['email']
         street_number = request.form['street_number']
         
+
         conn = sqlite3.connect('databases/database.db')
         c = conn.cursor()
-        c.execute(f'INSERT INTO persons VALUES (\'{name}\', \'{surname}\', {pesel}, \'{city}\', \'{street}\',\'{street_number}\', \'{phone_number}\', \'{credential}\', \'{country}\', \'{email}\', \'{pesel}\')')
+        c.execute(f'INSERT INTO persons (name, surname, pesel, city, street, street_number, phone_number, credentials, country, email, pesel) VALUES (\'{name}\', \'{surname}\', {pesel}, \'{city}\', \'{street}\',\'{street_number}\', \'{phone_number}\', \'{credential}\', \'{country}\', \'{email}\', \'{pesel}\')')
         conn.commit()
         conn.close()
 
@@ -176,21 +177,24 @@ def patient_info(patient_id):
 
     conn = sqlite3.connect('databases/database.db')
     c = conn.cursor()
-    for tooth in teethd:
-        for elem in tooth:
-           c.execute(f'INSERT INTO teeth VALUES ({patient_id}, \'{elem}\', 2)')
-    
-    for tooth in teethg:
-        for elem in tooth:
-           c.execute(f'INSERT INTO teeth VALUES ({patient_id}, \'{elem}\', 2)')
-    conn.commit()
+    teeth = c.execute(f'SELECT tooth, status FROM teeth WHERE patient_id = "{patient_id}"')
+    if not teeth.fetchall():
+        for tooth in teethd:
+            for elem in tooth:
+                c.execute(f'INSERT INTO teeth VALUES ({patient_id}, \'{elem}\', 2)')
+        
+        for tooth in teethg:
+            for elem in tooth:
+                c.execute(f'INSERT INTO teeth VALUES ({patient_id}, \'{elem}\', 2)')
+        conn.commit()
+
     patient = c.execute(f'SELECT * FROM persons WHERE id = "{patient_id}"')
     for row in patient.fetchall():
         patient_info.append(row)
 
     teeth = c.execute(f'SELECT tooth, status FROM teeth WHERE patient_id = "{patient_id}"')
     teeth_dict = {}
-    for tooth in teeth:
+    for tooth in teeth.fetchall():
         teeth_dict[tooth[0]] = tooth[1]
     print(teeth_dict)
     # for tooth in teeth:
@@ -198,13 +202,16 @@ def patient_info(patient_id):
     # print(tooth_info)
     # c.execute(f'INSERT INTO teeth VALUES (\'{patient_id}\', ')
 
-
     if request.method == "POST":
+        c.execute(f'DELETE FROM teeth WHERE patient_id = {patient_id}')
+        conn.commit()
+
         for tooth_info in request.form:
             print(patient_id, tooth_info, request.form[tooth_info])
-            # c.execute(f'DELETE FROM teeth WHERE patient_id = {patient_id}')
-            c.execute(f'INSERT INTO teeth VALUES ({patient_id}, \'{tooth_info}\', {request.form[tooth_info]})')
-            conn.commit()
+            c.execute(f'INSERT INTO teeth VALUES ({patient_id}, \'{tooth_info}\', {request.form[tooth_info]})')   
+        conn.commit()
+        return redirect(url_for('patient_info', patient_id = patient_id))
+        # conn.close()
 
     return render_template('doctor/patient_info.html', patient_info=patient_info[0], teethg = teethg, teethd = teethd, teeth_dict = teeth_dict)
     
