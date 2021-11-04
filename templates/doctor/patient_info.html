@@ -86,6 +86,17 @@
                     </p>
                 </div>
 
+                {% for tooth in tooth_info2 %}
+                    <div class="field has-addons">
+                    <p class="control">
+                        <a class="button is-static is-small">
+                            {{tooth}}
+                        </a>
+                        </p>
+                        <input class="input is-small" type="text">
+                    </div>
+                {% endfor %}
+
                 <div class="modal" id="myModal">
                     <div class="modal-background"></div>
                     <div class="modal-card" style="max-width: 450px;">
@@ -246,7 +257,7 @@
                             <div class="columns">
                                 <div class="column">
                                     <div class="control has-icons-left">
-                                        <input class="input" type="text" name="name" placeholder="Imię" value="{{patient_info[0]}}" disabled>
+                                        <input class="input" type="text" name="name" placeholder="Imię" value="{{patient_info[0]}}" readonly>
                                         <span class="icon is-small is-left">
                                             <i class="fas fa-user"></i>
                                         </span>
@@ -254,7 +265,7 @@
                                 </div>
                                 <div class="column">
                                     <div class="control has-icons-left">
-                                        <input class="input" type="text" name="surname" placeholder="Nazwisko" value="{{patient_info[1]}}" disabled>
+                                        <input class="input" type="text" name="surname" placeholder="Nazwisko" value="{{patient_info[1]}}" readonly>
                                         <span class="icon is-small is-left">
                                             <i class="fas fa-user"></i>
                                         </span>
@@ -268,7 +279,7 @@
                             <div class="columns">
                                 <div class="column">
                                     <div class="control has-icons-left">
-                                        <input class="input" type="text" name="pesel" placeholder="PESEL" value="{{patient_info[2]}}" disabled>
+                                        <input class="input" type="text" name="pesel" placeholder="PESEL" value="{{patient_info[2]}}" readonly>
                                         <span class="icon is-small is-left">
                                             <i class="fas fa-id-card"></i>
                                         </span>
@@ -276,7 +287,7 @@
                                 </div>
                                 <div class="column">
                                     <div class="control has-icons-left">
-                                        <input class="input" type="text" name="country" placeholder="Narodowość" value="{{patient_info[8]}}" disabled>
+                                        <input class="input" type="text" name="country" placeholder="Narodowość" value="{{patient_info[8]}}" readonly>
                                         <span class="icon is-small is-left">
                                             <i class="fas fa-globe"></i>
                                         </span>
@@ -291,7 +302,7 @@
                             <div class="columns">
                                 <div class="column">
                                     <div class="control has-icons-left">
-                                        <input class="input" type="text" name="city" placeholder="Miasto"  value="{{patient_info[3]}}" disabled>
+                                        <input class="input" type="text" name="city" placeholder="Miasto"  value="{{patient_info[3]}}" readonly>
                                         <span class="icon is-small is-left">
                                             <i class="fas fa-city"></i>
                                         </span>
@@ -299,7 +310,7 @@
                                 </div>
                                 <div class="column">
                                     <div class="control has-icons-left">
-                                        <input class="input" type="text" name="street" placeholder="Ulica"  value="{{patient_info[4]}}" disabled>
+                                        <input class="input" type="text" name="street" placeholder="Ulica"  value="{{patient_info[4]}}" readonly>
                                         <span class="icon is-small is-left">
                                             <i class="fas fa-home"></i>
                                         </span>
@@ -307,7 +318,7 @@
                                 </div>
                                 <div class="column is-one-quarter">
                                     <div class="control has-icons-left">
-                                        <input class="input" type="text" name="street_number" placeholder="Nr domu/mieszkania" value="{{patient_info[5]}}" disabled>
+                                        <input class="input" type="text" name="street_number" placeholder="Nr domu/mieszkania" value="{{patient_info[5]}}" readonly>
                                         <span class="icon is-small is-left">
                                             <i class="fas fa-home"></i>
                                         </span>
@@ -319,7 +330,7 @@
                         <div class="field">
                             <label class="label">Numer telefonu</label>
                             <div class="control has-icons-left">
-                                <input class="input" type="text" name="phone_number" value="{{patient_info[6]}}" disabled>
+                                <input class="input" type="text" name="phone_number" value="{{patient_info[6]}}" readonly>
                                 <span class="icon is-small is-left">
                                     <i class="fas fa-phone"></i>
                                 </span>
@@ -329,7 +340,7 @@
                         <div class="field">
                             <label class="label">E-mail</label>
                             <div class="control has-icons-left">
-                                <input class="input" type="text" name="email"  value="{{patient_info[9]}}" disabled>
+                                <input class="input" type="text" name="email"  value="{{patient_info[9]}}" readonly>
                                 <span class="icon is-small is-left">
                                     <i class="fas fa-envelope"></i>
                                 </span>

@@ -171,6 +171,7 @@ def patients_list():
 def patient_info(patient_id):
     patient_info = []
     tooth_info = []
+    tooth_info2 = []
     teethd = [['ld8', 'ld7', 'ld6', 'ld5', 'ld4', 'ld3', 'ld2', 'ld1'], ['pd1', 'pd2', 'pd3', 'pd4', 'pd5', 'pd6', 'pd7', 'pd8']]
     teethg = [['lg8', 'lg7', 'lg6', 'lg5', 'lg4', 'lg3', 'lg2', 'lg1'], ['pg1', 'pg2', 'pg3', 'pg4', 'pg5', 'pg6', 'pg7', 'pg8']]
 
@@ -181,11 +182,11 @@ def patient_info(patient_id):
     if not teeth.fetchall():
         for tooth in teethd:
             for elem in tooth:
-                c.execute(f'INSERT INTO teeth VALUES ({patient_id}, \'{elem}\', 2)')
+                c.execute(f'INSERT INTO teeth VALUES ({patient_id}, \'{elem}\', 2, \'\')')
         
         for tooth in teethg:
             for elem in tooth:
-                c.execute(f'INSERT INTO teeth VALUES ({patient_id}, \'{elem}\', 2)')
+                c.execute(f'INSERT INTO teeth VALUES ({patient_id}, \'{elem}\', 2, \'\')')
         conn.commit()
 
     patient = c.execute(f'SELECT * FROM persons WHERE id = "{patient_id}"')
@@ -196,7 +197,9 @@ def patient_info(patient_id):
     teeth_dict = {}
     for tooth in teeth.fetchall():
         teeth_dict[tooth[0]] = tooth[1]
-    print(teeth_dict)
+        if tooth[1] != 2:
+            tooth_info2.append(tooth[0])
+    print(tooth_info2)
     # for tooth in teeth:
     #     tooth_info.append(tooth)
     # print(tooth_info)
@@ -208,12 +211,12 @@ def patient_info(patient_id):
 
         for tooth_info in request.form:
             print(patient_id, tooth_info, request.form[tooth_info])
-            c.execute(f'INSERT INTO teeth VALUES ({patient_id}, \'{tooth_info}\', {request.form[tooth_info]})')   
+            c.execute(f'INSERT INTO teeth VALUES ({patient_id}, \'{tooth_info}\', {request.form[tooth_info]}, \'\')')   
         conn.commit()
         return redirect(url_for('patient_info', patient_id = patient_id))
         # conn.close()
 
-    return render_template('doctor/patient_info.html', patient_info=patient_info[0], teethg = teethg, teethd = teethd, teeth_dict = teeth_dict)
+    return render_template('doctor/patient_info.html', patient_info=patient_info[0], teethg = teethg, teethd = teethd, teeth_dict = teeth_dict, tooth_info2=tooth_info2)
     
 
 @app.route('/user_list', methods = ['GET', 'POST'])
