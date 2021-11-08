@@ -85,7 +85,7 @@
                         </button>
                     </p>
                 </div>
-
+                <form method="POST">
                 {% for tooth in tooth_info2 %}
                     <div class="field has-addons">
                     <p class="control">
@@ -93,10 +93,11 @@
                             {{tooth}}
                         </a>
                         </p>
-                        <input class="input is-small" type="text">
+                        <input class="input is-small" type="text" name={{tooth}} value="{{tooth_info2[tooth]}}">
                     </div>
                 {% endfor %}
-
+                <button type="submit" class="button is-small is-fullwidth is-info is-rounded is-light is-outlined" name="submit_button" value="submit_teeth_txt">Zatwierdź zmiany w informacjach o zębach</button>
+                </form>    
                 <div class="modal" id="myModal">
                     <div class="modal-background"></div>
                     <div class="modal-card" style="max-width: 450px;">
@@ -240,9 +241,9 @@
                         
                     </section>
                       <footer class="modal-card-foot">
-                        <button class="button is-success" type="submit">Save changes</button>
+                        <button class="button is-success" type="submit" name="submit_button" value="submit_teeth_status">Zapisz zmiany</button>
                     </form>
-                        <button class="button" data-bulma-modal="close">Cancel</button>
+                        <button class="button" data-bulma-modal="close">Anuluj</button>
                       </footer>
                     </div>
                   </div>

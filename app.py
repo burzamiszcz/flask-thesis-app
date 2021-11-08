@@ -30,6 +30,7 @@ def main():
                                                                         'password': password})
         if response.json()['status'] == 'ok':
             session['credentials'] = response.json()['credential']
+            session['id'] = response.json()['id']
             session['username'] = username
             return redirect(url_for('start', username = username))                  
         else:
@@ -49,11 +50,12 @@ def login():
         password_from_db = c.execute(f'SELECT password FROM persons WHERE email = \'{username}\'')
         for password_elem in password_from_db.fetchone():
             if password_elem == password_from_user:
-                credentials_for_user = c.execute(f'SELECT credentials FROM persons WHERE email = \'{username}\'')
-                for credential_elem in credentials_for_user.fetchone():
+                credentials_for_user = c.execute(f'SELECT credentials, id FROM persons WHERE email = \'{username}\'')
+                for credential_elem in credentials_for_user:
                     conn.close()             
                     return jsonify({'status': 'ok', 
-                                    'credential': credential_elem})
+                                    'credential': credential_elem[0],
+                                    'id': credential_elem[1]})
             else:
                 conn.close() 
                 return jsonify({'status': 'nok'})
@@ -192,29 +194,36 @@ def patient_info(patient_id):
     patient = c.execute(f'SELECT * FROM persons WHERE id = "{patient_id}"')
     for row in patient.fetchall():
         patient_info.append(row)
+    
 
-    teeth = c.execute(f'SELECT tooth, status FROM teeth WHERE patient_id = "{patient_id}"')
+    teeth = c.execute(f'SELECT tooth, status, tooth_info FROM teeth WHERE patient_id = "{patient_id}"')
     teeth_dict = {}
+    tooth_info2 = {}
     for tooth in teeth.fetchall():
         teeth_dict[tooth[0]] = tooth[1]
+        
         if tooth[1] != 2:
-            tooth_info2.append(tooth[0])
-    print(tooth_info2)
-    # for tooth in teeth:
-    #     tooth_info.append(tooth)
-    # print(tooth_info)
-    # c.execute(f'INSERT INTO teeth VALUES (\'{patient_id}\', ')
+            tooth_info2[tooth[0]] = tooth[2]
+            # tooth_info2.append(tooth[0])
 
     if request.method == "POST":
-        c.execute(f'DELETE FROM teeth WHERE patient_id = {patient_id}')
-        conn.commit()
 
-        for tooth_info in request.form:
-            print(patient_id, tooth_info, request.form[tooth_info])
-            c.execute(f'INSERT INTO teeth VALUES ({patient_id}, \'{tooth_info}\', {request.form[tooth_info]}, \'\')')   
-        conn.commit()
-        return redirect(url_for('patient_info', patient_id = patient_id))
-        # conn.close()
+        if request.form["submit_button"] == "submit_teeth_txt":
+            for tooth_txt in request.form:
+                if request.form[tooth_txt] == "submit_teeth_txt":
+                    continue
+                c.execute(f"UPDATE teeth SET tooth_info = '{request.form[tooth_txt]}' WHERE patient_id = {patient_id} AND tooth = '{tooth_txt}'")
+            conn.commit()
+            return redirect(url_for('patient_info', patient_id = patient_id))
+        
+        if request.form["submit_button"] == "submit_teeth_status":
+            for tooth_info in request.form:
+                if request.form[tooth_info] == "submit_teeth_status":
+                    continue
+                c.execute(f"UPDATE teeth SET status = '{request.form[tooth_info]}' WHERE patient_id = {patient_id} AND tooth = '{tooth_info}'")   
+            conn.commit()
+            return redirect(url_for('patient_info', patient_id = patient_id))
+            # conn.close()
 
     return render_template('doctor/patient_info.html', patient_info=patient_info[0], teethg = teethg, teethd = teethd, teeth_dict = teeth_dict, tooth_info2=tooth_info2)
     
@@ -243,21 +252,16 @@ def my_profile():
     person = c.execute(f'SELECT * FROM persons WHERE email=\'{username}\'')
     for row in person.fetchall():
         person_info.append(row)
-
-    # if request.method == "POST":
-    #     name = request.form['name']
-    #     city = request.form['city']
-    #     street = request.form['street']
-    #     street_number = request.form['street_number']
-    #     phone_number = request.form['phone_number']
-    #     email = request.form['email']
-    #     conn = sqlite3.connect('databases/database.db')
-    #     c = conn.cursor()
-    #     c.execute(f'DELETE FROM office')
-    #     conn.commit()
-    #     c.execute(f'INSERT INTO office VALUES (\'{name}\', \'{city}\', \'{street}\',\'{street_number}\', \'{phone_number}\', \'{email}\')')
-    #     conn.commit()
-    #     conn.close()
     return render_template('doctor/my_profile.html', username=session['username'], person_info = person_info[0])
 
+@app.route('/list_box', methods = ['GET', 'POST'])
+def list_box():
+    conn = sqlite3.connect('databases/database.db')
+    c = conn.cursor()
+    print(session['id'])
+    messages = c.execute(f'''SELECT persons.name, persons.surname, messages.text, messages.date FROM messages
+                        LEFT JOIN persons
+                        ON messages.from_column = persons.id
+                        WHERE to_column = 6''')
+    return render_template('doctor/list_box.html', username=session['username'], messages = messages)
 
