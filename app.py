@@ -9,6 +9,14 @@ from flask import (Flask,
                     jsonify)
 from flask.helpers import url_for
 import sqlite3
+import time
+
+from operator import itemgetter
+
+def today_date():
+    now = time.datetime.now()
+    dt_string = now.strftime("%Y-%m-%d %H:%M:%S")
+    return dt_string
 
 app = Flask(__name__)
 
@@ -258,10 +266,66 @@ def my_profile():
 def list_box():
     conn = sqlite3.connect('databases/database.db')
     c = conn.cursor()
-    print(session['id'])
-    messages = c.execute(f'''SELECT persons.name, persons.surname, messages.text, messages.date FROM messages
+    messages = c.execute(f'''SELECT messages.from_column, messages.to_column, persons.name, persons.surname, messages.text, MAX(messages.date), read_flag FROM messages
                         LEFT JOIN persons
                         ON messages.from_column = persons.id
-                        WHERE to_column = 6''')
-    return render_template('doctor/list_box.html', username=session['username'], messages = messages)
+                        WHERE to_column = 6 OR from_column = 6
+                        GROUP BY messages.from_column, messages.to_column''')
+    messages_list = []
+    
+    # print(messages.fetchall())
+    print('seimanko')
+    for message in messages:
+        helped_list = []
+        for elem in message:
+            helped_list.append(elem)
+        messages_list.append(helped_list)
 
+    while True:
+        try:
+            for i in range(len(messages_list)):
+                for j in range(len(messages_list)):
+                    if messages_list[i][0] == messages_list[j][1] and messages_list[i][1] == messages_list[j][0]:
+                        if time.strptime(messages_list[i][5], "%Y-%m-%d %H:%M:%S") > time.strptime(messages_list[j][5], "%Y-%m-%d %H:%M:%S"):
+                            print(messages_list[i], messages_list[j])
+                            if messages_list[i][0] == session['id']:
+                                messages_list[i][2] = messages_list[j][2]
+                                messages_list[i][3] = messages_list[j][3]
+                            messages_list.remove(messages_list[j])
+                        else:
+                            if messages_list[j][0] == session['id']:
+                                messages_list[j][2] = messages_list[i][2]
+                                messages_list[j][3] = messages_list[i][3]
+                            messages_list.remove(messages_list[i])
+        except:
+            continue
+        break
+    messages_list = sorted(messages_list, key=itemgetter(5), reverse=True)
+    for messages in messages_list:
+        if messages[0] == session['id']:
+            messages[0] = messages[1]
+            messages[1] = messages[0]
+
+    return render_template('doctor/list_box.html', username=session['username'], messages_list = messages_list)
+
+@app.route('/list_box/<id>', methods = ['GET', 'POST'])
+def list_box_id(id):
+    conn = sqlite3.connect('databases/database.db')
+    c = conn.cursor()
+    messages = c.execute(f'''SELECT messages.from_column, messages.to_column, persons.name, persons.surname, messages.text, messages.date, read_flag FROM messages
+                        LEFT JOIN persons
+                        ON messages.from_column = persons.id
+                        WHERE (to_column = 2 AND from_column = 6) OR (to_column = 6 AND from_column = 2)
+                        GROUP BY messages.from_column, messages.to_column''')
+    messages_list = []
+    for message in messages:
+        helped_list = []
+        for elem in message:
+            helped_list.append(elem)
+        messages_list.append(helped_list)
+    messages_list = sorted(messages_list, key=itemgetter(5), reverse=True)
+
+    if request.method == 'POST':
+        messages_to_send = request.form['message_to_send']
+        c.execute(f"INSTER INTO messages VALUES ({session['id']}, {id}, ")
+    return render_template('doctor/list_box_id.html', messages_list = messages_list, id = session['id'])

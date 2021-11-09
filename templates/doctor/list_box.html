@@ -62,14 +62,26 @@ var input, filter, table, tr, i, j, column_length, count_td;
               <table id="myTable">
                 <tr class="header">
                   <th style="width: 20%;">Od</th>
-                  <th style="width: 80%;">Treść</th>
+                  <th style="width: 60%;">Treść</th>
+                  <th style="width: 20%;">Data</th>
                 </tr>
-                {% for row in messages %}
-                <tr onClick="window.location.replace('/patient_info/{{row[0]}}')">
-                  <td>{{row[0] + ' ' + row[1]}}</td>
-                  <td>{{row[2]}}</td>
-                  <td hidden>{{row[0]}} {{row[1]}}</td>
+                {% for row in messages_list %}
+                {% if row[6] == 0 %}
+                <tr onClick="window.location.replace('/list_box/{{row[0]}}')">
+                  <td style="opacity: 0.5;">{{row[2] + ' ' + row[3]}}</td>
+                  <td style="opacity: 0.5;">{{row[4]}}</td>
+                  <td style="opacity: 0.5;">{{row[5]}}</td>
+                  <td hidden>{{row[2]}} {{row[3]}}</td>
                 </tr>
+                {% endif %}
+                {% if row[6] == 1 %}
+                <tr onClick="window.location.replace('/list_box/{{row[0]}}')">
+                  <td><b>{{row[2] + ' ' + row[3]}}</b></td>
+                  <td><b>{{row[4]}}</b></td>
+                  <td><b>{{row[5]}}</b></td>
+                  <td hidden>{{row[2]}} {{row[3]}}</td>
+                </tr>
+                {% endif %}
                 {% endfor %}
               </table> 
         </div>
