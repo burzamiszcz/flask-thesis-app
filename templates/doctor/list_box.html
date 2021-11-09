@@ -74,7 +74,7 @@ var input, filter, table, tr, i, j, column_length, count_td;
                   <td hidden>{{row[2]}} {{row[3]}}</td>
                 </tr>
                 {% endif %}
-                {% if row[6] == 1 %}
+                {% if row[6] == 1 and row[0] != sesion_id %}
                 <tr onClick="window.location.replace('/list_box/{{row[0]}}')">
                   <td><b>{{row[2] + ' ' + row[3]}}</b></td>
                   <td><b>{{row[4]}}</b></td>
