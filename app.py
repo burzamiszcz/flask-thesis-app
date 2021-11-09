@@ -10,11 +10,12 @@ from flask import (Flask,
 from flask.helpers import url_for
 import sqlite3
 import time
+from datetime import datetime
 
 from operator import itemgetter
 
 def today_date():
-    now = time.datetime.now()
+    now = datetime.now()
     dt_string = now.strftime("%Y-%m-%d %H:%M:%S")
     return dt_string
 
@@ -274,7 +275,6 @@ def list_box():
     messages_list = []
     
     # print(messages.fetchall())
-    print('seimanko')
     for message in messages:
         helped_list = []
         for elem in message:
@@ -305,8 +305,8 @@ def list_box():
         if messages[0] == session['id']:
             messages[0] = messages[1]
             messages[1] = messages[0]
-
-    return render_template('doctor/list_box.html', username=session['username'], messages_list = messages_list)
+    print(messages_list)
+    return render_template('doctor/list_box.html', username=session['username'], messages_list = messages_list, self_id = session['id'])
 
 @app.route('/list_box/<id>', methods = ['GET', 'POST'])
 def list_box_id(id):
@@ -315,8 +315,8 @@ def list_box_id(id):
     messages = c.execute(f'''SELECT messages.from_column, messages.to_column, persons.name, persons.surname, messages.text, messages.date, read_flag FROM messages
                         LEFT JOIN persons
                         ON messages.from_column = persons.id
-                        WHERE (to_column = 2 AND from_column = 6) OR (to_column = 6 AND from_column = 2)
-                        GROUP BY messages.from_column, messages.to_column''')
+                        WHERE (to_column = {id} AND from_column = {session['id']}) OR (to_column = {session['id']} AND from_column = {id})
+                        ''')
     messages_list = []
     for message in messages:
         helped_list = []
@@ -327,5 +327,8 @@ def list_box_id(id):
 
     if request.method == 'POST':
         messages_to_send = request.form['message_to_send']
-        c.execute(f"INSTER INTO messages VALUES ({session['id']}, {id}, ")
+        print(messages_to_send, session['id'], id, today_date)
+        c.execute(f"INSERT INTO messages (from_column, to_column, date, text, read_flag) VALUES ({session['id']}, {id}, '{today_date()}', '{messages_to_send}', 1)")
+        conn.commit()
+        return redirect(url_for('list_box_id', id = id))
     return render_template('doctor/list_box_id.html', messages_list = messages_list, id = session['id'])
