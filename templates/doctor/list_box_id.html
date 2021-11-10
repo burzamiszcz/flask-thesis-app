@@ -18,6 +18,7 @@
 
             <div class="container">
                 <div class="box" style="min-width: 1000px; margin-top: 10px;">
+                    <h4 class="title is-4">Konwersacja z {{messages_with[0][0] + " "}}{{messages_with[0][1]}}</h4>
                     <form method="POST">
 
                         <div class="field is-grouped">
@@ -41,7 +42,7 @@
                               <div class="media-content">
                                 <div class="content">
                                   <p>
-                                    <strong>{{message[2] + ' ' + message[3]}}</strong>
+                                    <strong>{{message[2] + ' ' + message[3]}}</strong> <small style="font-size: 0.6em;">{{message[5]}}</small>
                                     <br>
                                     {{message[4]}}
                                   </p>
@@ -58,7 +59,7 @@
                               <div class="media-content">
                                 <div class="content">
                                   <p>
-                                    <strong>{{message[2] + ' ' + message[3]}}</strong>
+                                    <strong>{{message[2] + ' ' + message[3]}}</strong><small style="font-size: 0.6em;">{{"   " + message[5]}}</small>
                                     <br>
                                     {{message[4]}}
                                   </p>

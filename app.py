@@ -234,7 +234,7 @@ def patient_info(patient_id):
             return redirect(url_for('patient_info', patient_id = patient_id))
             # conn.close()
 
-    return render_template('doctor/patient_info.html', patient_info=patient_info[0], teethg = teethg, teethd = teethd, teeth_dict = teeth_dict, tooth_info2=tooth_info2)
+    return render_template('doctor/patient_info.html', patient_info=patient_info[0], teethg = teethg, teethd = teethd, teeth_dict = teeth_dict, tooth_info2=tooth_info2, patient_id=patient_id)
     
 
 @app.route('/user_list', methods = ['GET', 'POST'])
@@ -261,17 +261,29 @@ def my_profile():
     person = c.execute(f'SELECT * FROM persons WHERE email=\'{username}\'')
     for row in person.fetchall():
         person_info.append(row)
+    if request.method=='POST':
+        name = request.form['name']
+        surname = request.form['surname']
+        phone_number = request.form['phone_number']
+        email = request.form['email']
+        print('trololololo')
+        c.execute(f"UPDATE persons SET name='{name}', surname='{surname}', phone_number='{phone_number}', email='{email}' WHERE id={session['id']}")
+        conn.commit()
     return render_template('doctor/my_profile.html', username=session['username'], person_info = person_info[0])
 
 @app.route('/list_box', methods = ['GET', 'POST'])
 def list_box():
     conn = sqlite3.connect('databases/database.db')
     c = conn.cursor()
-    messages = c.execute(f'''SELECT messages.from_column, messages.to_column, persons.name, persons.surname, messages.text, MAX(messages.date), read_flag FROM messages
-                        LEFT JOIN persons
-                        ON messages.from_column = persons.id
+    messages = c.execute(f'''SELECT m.from_column, m.to_column, p.name, p.surname, p1.name, p1.surname, m.text, MAX(m.date), m.read_flag
+						FROM messages AS m
+                        LEFT JOIN persons AS p
+                        ON m.from_column = p.id
+						LEFT JOIN persons AS p1
+                        ON m.to_column = p1.id
+
                         WHERE to_column = 6 OR from_column = 6
-                        GROUP BY messages.from_column, messages.to_column''')
+                        GROUP BY m.from_column, m.to_column''')
     messages_list = []
     
     # print(messages.fetchall())
@@ -286,32 +298,34 @@ def list_box():
             for i in range(len(messages_list)):
                 for j in range(len(messages_list)):
                     if messages_list[i][0] == messages_list[j][1] and messages_list[i][1] == messages_list[j][0]:
-                        if time.strptime(messages_list[i][5], "%Y-%m-%d %H:%M:%S") > time.strptime(messages_list[j][5], "%Y-%m-%d %H:%M:%S"):
+                        if time.strptime(messages_list[i][7], "%Y-%m-%d %H:%M:%S") > time.strptime(messages_list[j][7], "%Y-%m-%d %H:%M:%S"):
                             print(messages_list[i], messages_list[j])
-                            if messages_list[i][0] == session['id']:
-                                messages_list[i][2] = messages_list[j][2]
-                                messages_list[i][3] = messages_list[j][3]
+                            # if messages_list[i][0] == session['id']:
+                            #     messages_list[i][2] = messages_list[j][2]
+                            #     messages_list[i][3] = messages_list[j][3]
                             messages_list.remove(messages_list[j])
                         else:
-                            if messages_list[j][0] == session['id']:
-                                messages_list[j][2] = messages_list[i][2]
-                                messages_list[j][3] = messages_list[i][3]
+                            # if messages_list[j][0] == session['id']:
+                            #     messages_list[j][2] = messages_list[i][2]
+                            #     messages_list[j][3] = messages_list[i][3]
                             messages_list.remove(messages_list[i])
         except:
             continue
         break
     messages_list = sorted(messages_list, key=itemgetter(5), reverse=True)
-    for messages in messages_list:
-        if messages[0] == session['id']:
-            messages[0] = messages[1]
-            messages[1] = messages[0]
+    # for messages in messages_list:
+    #     if messages[0] == session['id']:
+    #         messages[0] = messages[1]
+    #         messages[1] = messages[0]
     print(messages_list)
-    return render_template('doctor/list_box.html', username=session['username'], messages_list = messages_list, self_id = session['id'])
+    return render_template('doctor/list_box.html', username=session['username'], messages_list = messages_list, session_id = session['id'])
 
 @app.route('/list_box/<id>', methods = ['GET', 'POST'])
 def list_box_id(id):
     conn = sqlite3.connect('databases/database.db')
     c = conn.cursor()
+    c.execute(f"UPDATE messages SET read_flag = 0 WHERE from_column={id} AND to_column={session['id']}")
+    conn.commit()
     messages = c.execute(f'''SELECT messages.from_column, messages.to_column, persons.name, persons.surname, messages.text, messages.date, read_flag FROM messages
                         LEFT JOIN persons
                         ON messages.from_column = persons.id
@@ -324,6 +338,8 @@ def list_box_id(id):
             helped_list.append(elem)
         messages_list.append(helped_list)
     messages_list = sorted(messages_list, key=itemgetter(5), reverse=True)
+    messages_with = c.execute(f"SELECT name, surname FROM persons WHERE id = {id}")
+    messages_with = messages_with.fetchall()
 
     if request.method == 'POST':
         messages_to_send = request.form['message_to_send']
@@ -331,4 +347,4 @@ def list_box_id(id):
         c.execute(f"INSERT INTO messages (from_column, to_column, date, text, read_flag) VALUES ({session['id']}, {id}, '{today_date()}', '{messages_to_send}', 1)")
         conn.commit()
         return redirect(url_for('list_box_id', id = id))
-    return render_template('doctor/list_box_id.html', messages_list = messages_list, id = session['id'])
+    return render_template('doctor/list_box_id.html', messages_list = messages_list, id = session['id'], messages_with = messages_with)
