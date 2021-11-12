@@ -67,7 +67,7 @@ var input, filter, table, tr, i, j, column_length, count_td;
                 </tr>
 
                 {% for row in messages_list %}
-                  {% if row[6] == 0 or row[0] == session_id %}
+                  {% if row[8] == 0 or row[0] == session_id %}
                     {% if row[0] == session_id %}
                       <tr onClick="window.location.replace('/list_box/{{row[1]}}')">
                       {% elif row[1] == session_id %}
@@ -85,7 +85,7 @@ var input, filter, table, tr, i, j, column_length, count_td;
                   </tr>
                   {% endif %}
 
-                  {% if row[6] == 1 and row[0] != session_id %}
+                  {% if row[8] == 1 and row[0] != session_id %}
                     {% if row[0] == session_id %}
                       <tr onClick="window.location.replace('/list_box/{{row[1]}}')">
                     {% elif row[1] == session_id %}
