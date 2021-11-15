@@ -313,6 +313,7 @@ def list_box():
             continue
         break
     messages_list = sorted(messages_list, key=itemgetter(5), reverse=True)
+    
     # for messages in messages_list:
     #     if messages[0] == session['id']:
     #         messages[0] = messages[1]
