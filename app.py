@@ -349,3 +349,9 @@ def list_box_id(id):
         conn.commit()
         return redirect(url_for('list_box_id', id = id))
     return render_template('doctor/list_box_id.html', messages_list = messages_list, id = session['id'], messages_with = messages_with)
+
+
+@app.route('/calendar', methods = ['GET', 'POST'])
+def calendar():
+
+    return render_template('doctor/calendar.html', username=session['username'])
