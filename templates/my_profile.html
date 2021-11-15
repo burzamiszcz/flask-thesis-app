@@ -14,11 +14,14 @@
 <body>
     <section class="hero is-fullheight">
 
+        {% if credentials == "doctor" %}
+        {% include 'doctor/navbar.html' %}
+          {% else %}
         {% include 'patient/navbar.html' %}
+          {% endif %}
 
-        <div class="hero-body">
             <div class="container">
-                <div class="box main" style="max-width: 700px;">
+                <div class="box main" style="max-width: 700px; margin-top: 10px;">
                     <form method="POST">
 
                         <div class="field">
@@ -37,59 +40,6 @@
                                         <input class="input" type="text" name="surname" placeholder="Nazwisko" value={{person_info[1]}}>
                                         <span class="icon is-small is-left">
                                             <i class="fas fa-user"></i>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="field">
-                            <label class="label">PESEL i Narodowość</label>
-                            <div class="columns">
-                                <div class="column">
-                                    <div class="control has-icons-left">
-                                        <input class="input" type="text" name="pesel" placeholder="PESEL" value={{person_info[2]}}>
-                                        <span class="icon is-small is-left">
-                                            <i class="fas fa-id-card"></i>
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="column">
-                                    <div class="control has-icons-left">
-                                        <input class="input" type="text" name="country" placeholder="Narodowość"  value={{person_info[8]}}>
-                                        <span class="icon is-small is-left">
-                                            <i class="fas fa-globe"></i>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        
-                        <div class="field">
-                            <label class="label">Adres</label>
-                            <div class="columns">
-                                <div class="column">
-                                    <div class="control has-icons-left">
-                                        <input class="input" type="text" name="city" placeholder="Miasto"  value={{person_info[3]}}>
-                                        <span class="icon is-small is-left">
-                                            <i class="fas fa-city"></i>
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="column">
-                                    <div class="control has-icons-left">
-                                        <input class="input" type="text" name="street" placeholder="Ulica"  value={{person_info[4]}}>
-                                        <span class="icon is-small is-left">
-                                            <i class="fas fa-home"></i>
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="column is-one-quarter">
-                                    <div class="control has-icons-left">
-                                        <input class="input" type="text" name="street_number" placeholder="Nr domu/mieszkania"  value={{person_info[5]}}>
-                                        <span class="icon is-small is-left">
-                                            <i class="fas fa-home"></i>
                                         </span>
                                     </div>
                                 </div>
@@ -128,7 +78,6 @@
     
                 </div>
             </div>
-        </div>
     </section>
   </body>
 </html>

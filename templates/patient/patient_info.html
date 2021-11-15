@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Gabinet stomatologiczny</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/myedits.css') }}" />
+    <script defer src="{{ url_for('static', filename='js/bulma_modal.js') }}"></script>
+
+
+</head>
+
+<body>
+    <section class="hero is-fullheight">
+
+        {% include 'patient/navbar.html' %}
+
+            <div class="container is-fullwidth">
+
+                <div class="box" style="margin-top: 15px;">
+                    <div class="columns">
+                        {% for side in teethg %}
+                            {% for tooth in side %}
+                                {% if teeth_dict[tooth] == 1 %}
+                                    <div class="column">
+                                        <figure class="image is-48x48">
+                                            <img src="{{ url_for('static', filename='teeth/' + tooth + '.png') }}" style="filter: grayscale(100%) brightness(40%) sepia(100%) hue-rotate(-50deg) saturate(600%) contrast(0.8);">
+                                        </figure>
+                                    </div>
+                                {% endif %}
+                                {% if teeth_dict[tooth] == 2 %}
+                                    <div class="column">
+                                        <figure class="image is-48x48">
+                                            <img src="{{ url_for('static', filename='teeth/' + tooth + '.png') }}">
+                                        </figure>
+                                    </div>
+                                {% endif %}
+                                {% if teeth_dict[tooth] == 3 %}
+                                    <div class="column">
+                                        <figure class="image is-48x48">
+                                            <img src="{{ url_for('static', filename='teeth/' + tooth + '.png') }}" style="filter: grayscale(100%) brightness(60%) sepia(191%) hue-rotate(-708deg) saturate(600%) contrast(0.8);">
+                                        </figure>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        {% endfor %}
+                    </div>
+
+                    <div class="columns">
+                        {% for side in teethd %}
+                            {% for tooth in side %}
+                                {% if teeth_dict[tooth] == 1 %}
+                                    <div class="column">
+                                        <figure class="image is-48x48">
+                                            <img src="{{ url_for('static', filename='teeth/' + tooth + '.png') }}" style="filter: grayscale(100%) brightness(40%) sepia(100%) hue-rotate(-50deg) saturate(600%) contrast(0.8);">
+                                        </figure>
+                                    </div>
+                                {% endif %}
+                                {% if teeth_dict[tooth] == 2 %}
+                                    <div class="column">
+                                        <figure class="image is-48x48">
+                                            <img src="{{ url_for('static', filename='teeth/' + tooth + '.png') }}">
+                                        </figure>
+                                    </div>
+                                {% endif %}
+                                {% if teeth_dict[tooth] == 3 %}
+                                    <div class="column">
+                                        <figure class="image is-48x48">
+                                            <img src="{{ url_for('static', filename='teeth/' + tooth + '.png') }}" style="filter: grayscale(100%) brightness(60%) sepia(191%) hue-rotate(-708deg) saturate(600%) contrast(0.8);">
+                                        </figure>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        {% endfor %}
+                    </div>
+
+                </div>
+                <div class="field">
+                    <p class="control has-text-centered">
+
+                    </p>
+                </div>
+                <form method="POST">
+                {% for tooth in tooth_info2 %}
+                    <div class="field has-addons">
+                    <p class="control">
+                        <a class="button is-static is-small">
+                            {{tooth}}
+                        </a>
+                        </p>
+                        <input class="input is-small" type="text" name={{tooth}} value="{{tooth_info2[tooth]}}">
+                    </div>
+                {% endfor %}
+                </form>    
+
+
+
+
+                <div class="box main" style="max-width: 700px; margin-top: 10px; margin-left: auto; margin-right: auto;">
+                    <form method="POST">
+
+                        <div class="field">
+                            <label class="label">Imię i nazwisko</label>
+                            <div class="columns">
+                                <div class="column">
+                                    <div class="control has-icons-left">
+                                        <input class="input" type="text" name="name" placeholder="Imię" value="{{patient_info[0]}}" readonly>
+                                        <span class="icon is-small is-left">
+                                            <i class="fas fa-user"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="column">
+                                    <div class="control has-icons-left">
+                                        <input class="input" type="text" name="surname" placeholder="Nazwisko" value="{{patient_info[1]}}" readonly>
+                                        <span class="icon is-small is-left">
+                                            <i class="fas fa-user"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label class="label">PESEL i Narodowość</label>
+                            <div class="columns">
+                                <div class="column">
+                                    <div class="control has-icons-left">
+                                        <input class="input" type="text" name="pesel" placeholder="PESEL" value="{{patient_info[2]}}" readonly>
+                                        <span class="icon is-small is-left">
+                                            <i class="fas fa-id-card"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="column">
+                                    <div class="control has-icons-left">
+                                        <input class="input" type="text" name="country" placeholder="Narodowość" value="{{patient_info[8]}}" readonly>
+                                        <span class="icon is-small is-left">
+                                            <i class="fas fa-globe"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        
+                        <div class="field">
+                            <label class="label">Adres</label>
+                            <div class="columns">
+                                <div class="column">
+                                    <div class="control has-icons-left">
+                                        <input class="input" type="text" name="city" placeholder="Miasto"  value="{{patient_info[3]}}" readonly>
+                                        <span class="icon is-small is-left">
+                                            <i class="fas fa-city"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="column">
+                                    <div class="control has-icons-left">
+                                        <input class="input" type="text" name="street" placeholder="Ulica"  value="{{patient_info[4]}}" readonly>
+                                        <span class="icon is-small is-left">
+                                            <i class="fas fa-home"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="column is-one-quarter">
+                                    <div class="control has-icons-left">
+                                        <input class="input" type="text" name="street_number" placeholder="Nr domu/mieszkania" value="{{patient_info[5]}}" readonly>
+                                        <span class="icon is-small is-left">
+                                            <i class="fas fa-home"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label class="label">Numer telefonu</label>
+                            <div class="control has-icons-left">
+                                <input class="input" type="text" name="phone_number" value="{{patient_info[6]}}" readonly>
+                                <span class="icon is-small is-left">
+                                    <i class="fas fa-phone"></i>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label class="label">E-mail</label>
+                            <div class="control has-icons-left">
+                                <input class="input" type="text" name="email"  value="{{patient_info[9]}}" readonly>
+                                <span class="icon is-small is-left">
+                                    <i class="fas fa-envelope"></i>
+                                </span>
+                            </div>
+                        </div>
+
+
+
+                    </form>
+    
+    
+                </div>
+            </div>
+    </section>
+  </body>
+</html>

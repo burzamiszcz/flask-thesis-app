@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Gabinet stomatologiczny</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/myedits.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/table.css') }}" />
+
+
+    <script>
+          function myFunction() {
+// Declare variables 
+var input, filter, table, tr, i, j, column_length, count_td;
+      column_length = document.getElementById('myTable').rows[0].cells.length;
+      input = document.getElementById("myInput");
+      filter = input.value.toUpperCase();
+      table = document.getElementById("myTable");
+      tr = table.getElementsByTagName("tr");
+      for (i = 1; i < tr.length; i++) { // except first(heading) row
+        count_td = 0;
+        for(j = 0; j < column_length; j++){ // except first column
+            td = tr[i].getElementsByTagName("td")[j];
+            /* ADD columns here that you want you to filter to be used on */
+            if (td) {
+              if ( td.innerHTML.toUpperCase().indexOf(filter) > -1)  {            
+                count_td++;
+              }
+            }
+        }
+        if(count_td > 0){
+            tr[i].style.display = "";
+        } else {
+            tr[i].style.display = "none";
+        }
+      }
+      
+        }
+    </script>
+
+</head>
+
+<body>
+    <section class="hero is-fullheight">
+
+        {% include 'patient/navbar.html' %}
+
+        <!-- <div class="hero-body"> -->
+            <div class="container has-text-centered is-fullwidth" style="margin-top: 10px; min-width: 1000px;">
+
+              <div class="control has-icons-left">
+                <input class="input" id="myInput" type="text" onkeyup="myFunction()" name="name" placeholder="Imię">
+                <span class="icon is-small is-left">
+                    <i class="fas fa-search"></i>
+                </span>
+              </div>
+
+              <!-- <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Wyszukaj.."> -->
+              <table id="myTable">
+                <tr class="header">
+                  <th style="width: 20%;">Od</th>
+                  <th style="width: 60%;">Treść</th>
+                  <th style="width: 20%;">Data</th>
+                </tr>
+
+                {% for row in messages_list %}
+                  {% if row[8] == 0 or row[0] == session_id %}
+                    {% if row[0] == session_id %}
+                      <tr onClick="window.location.replace('/list_box/{{row[1]}}')">
+                      {% elif row[1] == session_id %}
+                      <tr onClick="window.location.replace('/list_box/{{row[0]}}')">
+                      {% endif %}
+                    {% if row[0] == session_id %}
+                    <td style="opacity: 0.5;">{{row[4] + ' ' + row[5]}}</td>
+                    <td style="opacity: 0.5;">Ty: {{row[6]}}</td>
+                    {% else %}
+                    <td style="opacity: 0.5;">{{row[2] + ' ' + row[3]}}</td>
+                    <td style="opacity: 0.5;">{{row[6]}}</td>
+                    {% endif %}     
+                    <td style="opacity: 0.5;">{{row[7]}}</td>
+                    <td hidden>{{row[2]}} {{row[3]}}</td>
+                  </tr>
+                  {% endif %}
+
+                  {% if row[8] == 1 and row[0] != session_id %}
+                    {% if row[0] == session_id %}
+                      <tr onClick="window.location.replace('/list_box/{{row[1]}}')">
+                    {% elif row[1] == session_id %}
+                      <tr onClick="window.location.replace('/list_box/{{row[0]}}')">
+                    {% endif %}
+                    <td><b>{{row[2] + ' ' + row[3]}}</b></td>
+                    <td><b>{{row[6]}}</b></td>
+                    <td><b>{{row[7]}}</b></td>
+                    <td hidden>{{row[2]}} {{row[3]}}</td>
+                  </tr>
+                  {% endif %}
+                  
+                {% endfor %}
+              </table> 
+        </div>
+
+<script>
+
+function goToLink(){
+  pass;
+};
+
+</script>
+      <!-- </div> -->
+    </section>
+  </body>
+</html>

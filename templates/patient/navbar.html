@@ -34,19 +34,19 @@
                         </span>
 
                         <span class="navbar-item">
-                            <a href="/myprofile" class="button is-info is-inverted">
+                            <a href="{{ url_for('patient_info', patient_id=id, username=username) }}" class="button is-info is-inverted">
                                 <span>Dokumentacja medyczna</span>
                            </a>
                         </span>
                         
                         <span class="navbar-item">
-                            <a href="/stats" class="button is-info is-inverted">
+                            <a href="{{ url_for('list_box', username=username) }}" class="button is-info is-inverted">
                                 <span>Skrzynka odbiorcza</span>
                              </a>
                         </span>
 
                         <span class="navbar-item">
-                            <a href="/myprofile" class="button is-info is-inverted">
+                            <a href="{{ url_for('my_profile', username=username) }}" class="button is-info is-inverted">
                                 <span>Mój profil</span>
                            </a>
                         </span>

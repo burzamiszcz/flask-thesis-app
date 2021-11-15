@@ -81,7 +81,7 @@ def start():
     credentials = session['credentials']
     username = session['username']
     if credentials == 'patient':
-        return render_template('patient/start.html', username = username, credentials = credentials, id = session['id'])
+        return render_template('patient/start.html', username = username, credentials = credentials)
     elif credentials == 'doctor':
       return render_template('doctor/start.html', username = username, credentials = credentials)
     else:
@@ -235,11 +235,9 @@ def patient_info(patient_id):
             conn.commit()
             return redirect(url_for('patient_info', patient_id = patient_id))
             # conn.close()
-    if session['credentials'] == "doctor":
-        return render_template('doctor/patient_info.html', patient_info=patient_info[0], teethg = teethg, teethd = teethd, teeth_dict = teeth_dict, tooth_info2=tooth_info2, patient_id=patient_id)
-    else:
-        return render_template('patient/patient_info.html', patient_info=patient_info[0], teethg = teethg, teethd = teethd, teeth_dict = teeth_dict, tooth_info2=tooth_info2, patient_id=patient_id)
 
+    return render_template('doctor/patient_info.html', patient_info=patient_info[0], teethg = teethg, teethd = teethd, teeth_dict = teeth_dict, tooth_info2=tooth_info2, patient_id=patient_id)
+    
 
 @app.route('/user_list', methods = ['GET', 'POST'])
 def user_list():
@@ -273,10 +271,7 @@ def my_profile():
         print('trololololo')
         c.execute(f"UPDATE persons SET name='{name}', surname='{surname}', phone_number='{phone_number}', email='{email}' WHERE id={session['id']}")
         conn.commit()
-    if session['credentials'] == "doctor":
-        return render_template('doctor/my_profile.html', username=session['username'], person_info = person_info[0], credentials = session['credentials'])
-    else:
-        return render_template('patient/my_profile.html', username=session['username'], person_info = person_info[0], credentials = session['credentials'])
+    return render_template('doctor/my_profile.html', username=session['username'], person_info = person_info[0])
 
 @app.route('/list_box', methods = ['GET', 'POST'])
 def list_box():
@@ -326,7 +321,7 @@ def list_box():
     #         messages[0] = messages[1]
     #         messages[1] = messages[0]
     print(messages_list)
-    return render_template('list_box.html', username=session['username'], messages_list = messages_list, session_id = session['id'], credentials = session['credentials'])
+    return render_template('doctor/list_box.html', username=session['username'], messages_list = messages_list, session_id = session['id'])
 
 @app.route('/list_box/<id>', methods = ['GET', 'POST'])
 def list_box_id(id):
@@ -355,7 +350,7 @@ def list_box_id(id):
         c.execute(f"INSERT INTO messages (from_column, to_column, date, text, read_flag) VALUES ({session['id']}, {id}, '{today_date()}', '{messages_to_send}', 1)")
         conn.commit()
         return redirect(url_for('list_box_id', id = id))
-    return render_template('list_box_id.html', messages_list = messages_list, id = session['id'], messages_with = messages_with, credentials=session['credentials'])
+    return render_template('doctor/list_box_id.html', messages_list = messages_list, id = session['id'], messages_with = messages_with)
 
 
 @app.route('/calendar', methods = ['GET', 'POST'])
