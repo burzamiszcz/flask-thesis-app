@@ -11,12 +11,24 @@ from flask.helpers import url_for
 import sqlite3
 import time
 from datetime import datetime
-
+import os
+from os.path import isfile, join
 from operator import itemgetter
+import pprint
+
+def files_in_the_path(path):
+    files = [f for f in os.listdir(path) if isfile(join(path, f))]
+
+    return files
 
 def today_date():
     now = datetime.now()
     dt_string = now.strftime("%Y-%m-%d %H:%M:%S")
+    return dt_string
+
+def today_date_rtg_save():
+    now = datetime.now()
+    dt_string = now.strftime("%Y-%m-%d-%H-%M-%S")
     return dt_string
 
 app = Flask(__name__)
@@ -83,7 +95,7 @@ def start():
     if credentials == 'patient':
         return render_template('patient/start.html', username = username, credentials = credentials, id = session['id'])
     elif credentials == 'doctor':
-      return render_template('doctor/start.html', username = username, credentials = credentials)
+      return render_template('doctor/start.html', username = username, credentials = credentials, id = session['id'])
     else:
         return redirect(url_for('main'))
 
@@ -111,7 +123,7 @@ def office():
         c.execute(f'INSERT INTO office VALUES (\'{name}\', \'{city}\', \'{street}\',\'{street_number}\', \'{phone_number}\', \'{email}\')')
         conn.commit()
         conn.close()
-    return render_template('doctor/office.html', username=session['username'], list_office=list_office[0])
+    return render_template('doctor/office.html', username=session['username'], list_office=list_office[0], credentials = session['credentials'], id = session['id'] )
         
 
 @app.route('/add_patients', methods=['POST', 'GET'])
@@ -138,7 +150,7 @@ def add_patients():
         conn.commit()
         conn.close()
 
-    return render_template('doctor/add_patients.html', username = session['username'])
+    return render_template('doctor/add_patients.html', username = session['username'], credentials = session['credentials'], id = session['id'] )
 
 @app.route('/add_doctors', methods=['POST', 'GET'])
 def add_doctors():
@@ -167,7 +179,7 @@ def add_doctors():
         conn.commit()
         conn.close()
 
-    return render_template('doctor/add_doctors.html', username = session['username'], list=list)
+    return render_template('doctor/add_doctors.html', username = session['username'], list=list, credentials = session['credentials'], id = session['id'] )
 
 
 @app.route('/patients_list', methods=['POST', 'GET'])
@@ -178,7 +190,7 @@ def patients_list():
     user_list = c.execute(f'SELECT id, name, surname, pesel, city, street, street_number, phone_number FROM persons WHERE credentials=\'patient\'')
     for row in user_list.fetchall():
         list.append(row)
-    return render_template('doctor/patients_list.html', username = session['username'], list=list)
+    return render_template('doctor/patients_list.html', username = session['username'], list=list, credentials = session['credentials'], id = session['id'] )
 
 @app.route('/patient_info/<patient_id>', methods=['POST', 'GET'])
 def patient_info(patient_id):
@@ -236,10 +248,32 @@ def patient_info(patient_id):
             return redirect(url_for('patient_info', patient_id = patient_id))
             # conn.close()
     if session['credentials'] == "doctor":
-        return render_template('doctor/patient_info.html', patient_info=patient_info[0], teethg = teethg, teethd = teethd, teeth_dict = teeth_dict, tooth_info2=tooth_info2, patient_id=patient_id)
+        return render_template('doctor/patient_info.html', patient_info=patient_info[0], teethg = teethg, teethd = teethd, teeth_dict = teeth_dict, tooth_info2=tooth_info2, patient_id=patient_id, credentials = session['credentials'], id = session['id'] )
     else:
-        return render_template('patient/patient_info.html', patient_info=patient_info[0], teethg = teethg, teethd = teethd, teeth_dict = teeth_dict, tooth_info2=tooth_info2, patient_id=patient_id)
+        return render_template('patient/patient_info.html', patient_info=patient_info[0], teethg = teethg, teethd = teethd, teeth_dict = teeth_dict, tooth_info2=tooth_info2, patient_id=patient_id, credentials = session['credentials'], id = session['id'] )
 
+
+@app.route('/rtg/<patient_id>', methods = ['GET', 'POST'])
+def rtg(patient_id):
+    if not os.path.exists(f"./static/patients_rtg/{patient_id}"):
+        os.makedirs(f"./static/patients_rtg/{patient_id}")
+
+    all_files = files_in_the_path(f"./static/patients_rtg/{patient_id}")
+    print(all_files)
+
+    if request.method == "POST" :
+        if request.files['rtg'].filename != '':
+            rtg = request.files['rtg']
+            extension = rtg.filename.split('.')
+            print(extension)
+            rtg.save(f"./static/patients_rtg/{patient_id}/{today_date_rtg_save()}.{extension[-1]}")
+            return redirect(url_for('rtg', patient_id = patient_id))
+        else:
+            pass
+    return render_template('rtg.html', username=session['username'], all_files = all_files, patient_id = patient_id, credentials = session['credentials'], id = session['id'] )
+
+
+@app.route('/databases')
 
 @app.route('/user_list', methods = ['GET', 'POST'])
 def user_list():
@@ -274,9 +308,9 @@ def my_profile():
         c.execute(f"UPDATE persons SET name='{name}', surname='{surname}', phone_number='{phone_number}', email='{email}' WHERE id={session['id']}")
         conn.commit()
     if session['credentials'] == "doctor":
-        return render_template('doctor/my_profile.html', username=session['username'], person_info = person_info[0], credentials = session['credentials'])
+        return render_template('doctor/my_profile.html', username=session['username'], person_info = person_info[0], credentials = session['credentials'], id = session['id'] )
     else:
-        return render_template('patient/my_profile.html', username=session['username'], person_info = person_info[0], credentials = session['credentials'])
+        return render_template('patient/my_profile.html', username=session['username'], person_info = person_info[0], credentials = session['credentials'], id = session['id'] )
 
 @app.route('/list_box', methods = ['GET', 'POST'])
 def list_box():
@@ -319,14 +353,13 @@ def list_box():
         except:
             continue
         break
-    messages_list = sorted(messages_list, key=itemgetter(5), reverse=True)
-    
+    messages_list = sorted(messages_list, key=itemgetter(7), reverse=True)
     # for messages in messages_list:
     #     if messages[0] == session['id']:
     #         messages[0] = messages[1]
     #         messages[1] = messages[0]
-    print(messages_list)
-    return render_template('list_box.html', username=session['username'], messages_list = messages_list, session_id = session['id'], credentials = session['credentials'])
+    pprint.pprint(messages_list)
+    return render_template('list_box.html', username=session['username'], messages_list = messages_list, session_id = session['id'], credentials = session['credentials'], id = session['id'] )
 
 @app.route('/list_box/<id>', methods = ['GET', 'POST'])
 def list_box_id(id):
@@ -355,7 +388,7 @@ def list_box_id(id):
         c.execute(f"INSERT INTO messages (from_column, to_column, date, text, read_flag) VALUES ({session['id']}, {id}, '{today_date()}', '{messages_to_send}', 1)")
         conn.commit()
         return redirect(url_for('list_box_id', id = id))
-    return render_template('list_box_id.html', messages_list = messages_list, id = session['id'], messages_with = messages_with, credentials=session['credentials'])
+    return render_template('list_box_id.html', messages_list = messages_list, messages_with = messages_with, credentials = session['credentials'], id = session['id'] )
 
 
 @app.route('/calendar', methods = ['GET', 'POST'])

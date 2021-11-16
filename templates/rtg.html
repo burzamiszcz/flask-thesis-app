@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Gabinet stomatologiczny</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/myedits.css') }}" />
+
+</head>
+
+<body>
+    <section class="hero is-fullheight">
+
+        {% if credentials == "doctor" %}
+        {% include 'doctor/navbar.html' %}
+          {% else %}
+        {% include 'patient/navbar.html' %}
+          {% endif %}
+
+            <div class="container">
+                <div class="box main" style="max-width: 700px; margin-top: 10px;">
+                    <form method="POST" enctype = "multipart/form-data">
+                        <div class="container" style="min-width: 500px;">
+                            <div class="field">
+                                <label class="label">Wybierz RTG/Zdjęcie</label>
+                                        <div id="file-js-example2" class="file has-name is-fullwidth">
+                                            <label class="file-label">
+                                              <input class="file-input" type="file" name="rtg">
+                                              <span class="file-cta">
+                                                <span class="file-icon">
+                                                  <i class="fas fa-upload"></i>
+                                                </span>
+                                                <span class="file-label">
+                                                  Wybierz
+                                                </span>
+                                              </span>
+                                              <span class="file-name">
+                                                Brak pliku
+                                              </span>
+                                            </label>
+                                            
+                                          </div>
+                                          
+                                          <script>
+                                            const fileInput2 = document.querySelector('#file-js-example2 input[type=file]');
+                                            fileInput2.onchange = () => {
+                                              if (fileInput2.files.length > 0) {
+                                                const fileName2 = document.querySelector('#file-js-example2 .file-name');
+                                                fileName2.textContent = fileInput2.files[0].name;
+                                              }
+                                            }
+                                          </script>
+                            <button class="button is-large is-fullwidth" style="margin-top: 10px; margin-bottom: 10px;">Załaduj</button>
+            
+            
+                            </div>
+            
+                        </div>
+                    </form>
+                    <div class="box main" style="max-width: 700px; margin-top: 10px;">
+
+                        {% for files in all_files %}
+                        <div>
+                            <figure class="image">
+                                <b>{{files}}: </b>
+                                <!-- <img src="databases/patients_rtg/{{patient_id}}/{{files}}"> -->
+                                <a href ="{{ url_for('static', filename='patients_rtg/' + patient_id + '/' + files) }}">
+                                <img style="height: auto; width: auto; max-width: 300px; max-height: 300px;" src="{{ url_for('static', filename='patients_rtg/' + patient_id + '/' + files) }}">
+                                </a>
+                              </figure>
+                        </div>
+                        {% endfor %}
+
+                    </div>
+
+    
+                </div>
+
+            </div>
+    </section>
+  </body>
+</html>
