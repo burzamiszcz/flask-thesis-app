@@ -1,5 +1,6 @@
 import re
 import requests
+
 from flask import (Flask,
                     render_template,
                     request,
@@ -14,7 +15,19 @@ from datetime import datetime
 import os
 from os.path import isfile, join
 from operator import itemgetter
+import calendar
 import pprint
+from datetime import date, timedelta, datetime
+
+def day_in_polish(id):
+    if id == 1: return 'poniedziałek'
+    elif id == 2: return 'wtorek'
+    elif id == 3: return 'środa'
+    elif id == 4: return 'czwartek'
+    elif id == 5: return 'piątek'
+    elif id == 6: return 'sobota'
+    elif id == 7: return 'niedziela'
+    else: pass
 
 def files_in_the_path(path):
     files = [f for f in os.listdir(path) if isfile(join(path, f))]
@@ -24,6 +37,11 @@ def files_in_the_path(path):
 def today_date():
     now = datetime.now()
     dt_string = now.strftime("%Y-%m-%d %H:%M:%S")
+    return dt_string
+
+def today_date_minus_delta(days):
+    now = datetime.today() - timedelta(days=days)
+    dt_string = now.strftime("%Y-%m-%d")
     return dt_string
 
 def today_date_rtg_save():
@@ -392,9 +410,42 @@ def list_box_id(id):
 
 
 @app.route('/calendar', methods = ['GET', 'POST'])
-def calendar():
+def calendar_sign():
+    
+    today = today_date_minus_delta(0)
+    week_now = None
+    month = today.split('-')[1]
+    year = today.split('-')[0]
 
-    return render_template('doctor/calendar.html', username=session['username'])
+    # conn = sqlite3.connect('databases/database.db')
+    # c = conn.cursor()
+    # current_month_days = c.execute(f"SELECT * FROM calendar WHERE strftime('%m', date) = '{today.split('-')[1]}' AND strftime('%Y', date) = '{today.split('-')[0]}'")
+
+    # for elem in current_month_days:
+    #     print(elem)
+
+    for week in calendar.monthcalendar(int(year), int(month)):
+        if int(today.split('-')[2]) in week:
+            week_now = calendar.monthcalendar(2021,11).index(week)
+
+    print(week_now)
+
+    print(calendar.monthcalendar(2021,11))
+
+    days_names = []
+    for i in range(7):
+        days_names.append(day_in_polish(i + 1))
+    hours_per_day = []
+    for i in range(8):
+        hours_per_day.append(f'{i+8}:00')
+        hours_per_day.append(f'{i+8}:30')
+        
+    week_for_display = calendar.monthcalendar(int(year), int(month))[week_now]
+
+    if request.method == "POST":
+        print(request.form)
+
+    return render_template('doctor/calendar.html', username=session['username'], week_now = week_now, days_names = days_names, hours_per_day = hours_per_day, week_for_display = week_for_display, month = month, year = year)
 
 @app.route('/test', methods = ['GET', 'POST'])
 def test():

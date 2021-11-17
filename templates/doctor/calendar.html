@@ -9,19 +9,7 @@
     <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/myedits.css') }}" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-    <style type="text/css">
-        p, body, td, input, select, button { font-family: -apple-system,system-ui,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif; font-size: 14px; }
-        body { padding: 0px; margin: 0px; background-color: #ffffff; }
-        a { color: #1155a3; }
-        .space { margin: 10px 0px 10px 0px; }
-        .header { background: #003267; background: linear-gradient(to right, #011329 0%,#00639e 44%,#011329 100%); padding:20px 10px; color: white; box-shadow: 0px 0px 10px 5px rgba(0,0,0,0.75); }
-        .header a { color: white; }
-        .header h1 a { text-decoration: none; }
-        .header h1 { padding: 0px; margin: 0px; }
-        .main { padding: 10px; margin-top: 10px; }
-        .generated { color: #999; margin-top: 10px; }
-        .generated a { color: #999; }
-      </style>
+
         <script src="{{ url_for('static', filename='js/daypilot/daypilot-all.min.js') }}"></script>
       <!-- DayPilot library -->
       <!-- <script src="js/daypilot/daypilot-all.min.js"></script> -->
@@ -33,76 +21,24 @@
 
         {% include 'doctor/navbar.html' %}
 
-            <div class="container">
+            <div class="container">         
                 <div class="box main" style="min-width: 1000px; margin-top: 10px;">
-                    <body>
-                      <div class="header">
-                        <h1><a href='https://code.daypilot.org/47550/event-calendar-widget-for-javascript-php'>Event Calendar Widget for JavaScript/PHP</a></h1>
-                        <div><a href="https://javascript.daypilot.org/">DayPilot for JavaScript</a> - HTML5 Calendar/Scheduling Components for JavaScript/Angular/React/Vue</div>
-                      </div>
-                      
-                      <div class="main">
-                        <div id="dp"></div>
-                        <div class="generated">Generated using <a href="https://builder.daypilot.org/">DayPilot UI Builder</a>.</div>
-                      </div>
-                      
-                      <script>
-                        var dp = new DayPilot.Calendar("dp", {
-                          viewType: "Week",
-                          cellHeight: 30,
-                          timeRangeSelectedHandling: "Enabled",
-                          onTimeRangeSelected: async (args) => {
-                            const modal = await DayPilot.Modal.prompt("Create a new event:", "Event 1");
-                            const dp = args.control;
-                            dp.clearSelection();
-                            if (modal.canceled) { return; }
-                          
-                          params = {
-                              "start": args.start,
-                              "end": args.end,
-                              "id": DayPilot.guid(),
-                              "text": modal.result
-                            }
-                            // dp.events.add(params)
-                          DayPilot.Http.ajax({
-                                                    url: "/test",
-                                                    data: {data: params},
-                                                    type: 'POST', 
-                                                    // success: function(ajax) {
-                                            
-                                                    //   // params.id = ajax.data.id;
-                                                    //   dp.events.add(params);
-                                            
-                                                    //   // var response = ajax.data;
-                                                    //   // dp.message("Created: " + response.message);
-                                                    // }
-                                                  });
-                          },
-                          eventDeleteHandling: "Disabled",
-                          eventMoveHandling: "Update",
-                          onEventMoved: (args) => {
-                            args.control.message("Event moved: " + args.e.text());
-                          },
-                          eventResizeHandling: "Update",
-                          onEventResized: (args) => {
-                            args.control.message("Event resized: " + args.e.text());
-                          },
-                          eventClickHandling: "Disabled",
-                          eventHoverHandling: "Disabled",
-                        });
-                        dp.events.list = [
-                          {
-                            id: "1",
-                            start: DayPilot.Date.today().addHours(10),
-                            end: DayPilot.Date.today().addHours(12),
-                            text: "Event 1"
-                          }
-                        ];
-                        dp.init();
-                      </script>
-                    </form>
-                </div>
+                  <form method="POST">
+                  <div class="columns">
+                    {% for n in range(7) %}
+                    <div class="column">
+                      {% for j in range(16) %}
+                        {% if j == 0 %}
+                          {{days_names[n]}} <br>
+                          {{year}}-{{month}}-{{week_for_display[n]}}
+                        {% endif %}
+                      <button type="submit" name="hourchoice" value="{{year}}-{{month}}-{{week_for_display[n]}}-{{hours_per_day[j]}}" class="button is-fullwidth">{{hours_per_day[j]}}</button>
+                      {% endfor %}
+                    </div>
+                    {% endfor %}
+                  </div>
+                </div> 
+              </form>                         
             </div>
-    </section>
   </body>
 </html>
