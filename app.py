@@ -409,45 +409,67 @@ def list_box_id(id):
     return render_template('list_box_id.html', messages_list = messages_list, messages_with = messages_with, credentials = session['credentials'], id = session['id'] )
 
 
-@app.route('/calendar', methods = ['GET', 'POST'])
-def calendar_sign():
-    
-    today = today_date_minus_delta(0)
+@app.route('/calendar/<delta>', methods = ['GET', 'POST'])
+def calendar_sign(delta):
+    if request.method == "POST":
+        delta = 3
+    print('delta session = ', session['delta'])
+    if int(delta) != 3:
+        if int(delta) == 0 or not session['delta']:
+            session['delta'] = 0
+        session['delta'] += 7 * int(delta)
+    today = today_date_minus_delta(int(session['delta']))
     week_now = None
     month = today.split('-')[1]
     year = today.split('-')[0]
 
-    # conn = sqlite3.connect('databases/database.db')
-    # c = conn.cursor()
-    # current_month_days = c.execute(f"SELECT * FROM calendar WHERE strftime('%m', date) = '{today.split('-')[1]}' AND strftime('%Y', date) = '{today.split('-')[0]}'")
-
-    # for elem in current_month_days:
-    #     print(elem)
-
+    conn = sqlite3.connect('databases/database.db')
+    c = conn.cursor()
+    current_month_days = c.execute(f"SELECT * FROM calendar WHERE strftime('%m', date) = '{today.split('-')[1]}' AND strftime('%Y', date) = '{today.split('-')[0]}'")
+    list_of_reserved_dates = []
+    for elem in current_month_days:
+        list_of_reserved_dates.append(elem[0])
+    # print(list_of_reserved_dates)
     for week in calendar.monthcalendar(int(year), int(month)):
         if int(today.split('-')[2]) in week:
-            week_now = calendar.monthcalendar(2021,11).index(week)
+            week_now = calendar.monthcalendar(int(year), int(month)).index(week)
 
-    print(week_now)
+    # print(week_now)
 
-    print(calendar.monthcalendar(2021,11))
+    # print(calendar.monthcalendar(2021,11))
 
     days_names = []
     for i in range(7):
         days_names.append(day_in_polish(i + 1))
     hours_per_day = []
     for i in range(8):
-        hours_per_day.append(f'{i+8}:00')
-        hours_per_day.append(f'{i+8}:30')
+        if i <= 1:
+            hours_per_day.append(f'0{i+8}:00')
+            hours_per_day.append(f'0{i+8}:30')
+        else:
+            hours_per_day.append(f'{i+8}:00')
+            hours_per_day.append(f'{i+8}:30')
+
         
     week_for_display = calendar.monthcalendar(int(year), int(month))[week_now]
+    print(week_for_display)
+    for i in range(len(week_for_display)):
+        if week_for_display[i] < 10:
+            week_for_display[i] = "0" + str(week_for_display[i])
+    print(week_for_display)
+
 
     if request.method == "POST":
-        print(request.form)
+        date_choice = request.form['hourchoice']
+        # print(date_choice)
+        conn = sqlite3.connect('databases/database.db')
+        c = conn.cursor()
+        c.execute(f"INSERT INTO calendar VALUES ('{date_choice}', 1)")
+        conn.commit()
+        return redirect(url_for('calendar_sign', delta=3))
 
-    return render_template('doctor/calendar.html', username=session['username'], week_now = week_now, days_names = days_names, hours_per_day = hours_per_day, week_for_display = week_for_display, month = month, year = year)
+    return render_template('doctor/calendar.html', credentials = session['credentials'], id = session['id'], username=session['username'], week_now = week_now, days_names = days_names, hours_per_day = hours_per_day, week_for_display = week_for_display, month = month, year = year, list_of_reserved_dates = list_of_reserved_dates)
 
 @app.route('/test', methods = ['GET', 'POST'])
 def test():
-    print(request.form)
     return render_template('doctor/calendar.html', username=session['username'])

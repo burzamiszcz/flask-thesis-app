@@ -28,17 +28,40 @@
                     {% for n in range(7) %}
                     <div class="column">
                       {% for j in range(16) %}
+                      
                         {% if j == 0 %}
+                        <span class="button is-static">
                           {{days_names[n]}} <br>
                           {{year}}-{{month}}-{{week_for_display[n]}}
+                          </span>
                         {% endif %}
-                      <button type="submit" name="hourchoice" value="{{year}}-{{month}}-{{week_for_display[n]}}-{{hours_per_day[j]}}" class="button is-fullwidth">{{hours_per_day[j]}}</button>
+                        {% if year|string + "-" + month|string + "-" + week_for_display[n]|string + " " + hours_per_day[j]|string + ":00" in list_of_reserved_dates %}
+                        <button type="submit" name="hourchoice" value="{{year}}-{{month}}-{{week_for_display[n]}} {{hours_per_day[j]}}:00" class="button is-danger is-fullwidth" disabled>{{hours_per_day[j]}}</button>
+                        {% else %}
+                        <button type="submit" name="hourchoice" value="{{year}}-{{month}}-{{week_for_display[n]}} {{hours_per_day[j]}}:00" class="button is-fullwidth">{{hours_per_day[j]}}</button>
+                        {% endif %}
+                        
                       {% endfor %}
                     </div>
                     {% endfor %}
                   </div>
                 </div> 
-              </form>                         
+              </form>   
+              <button onClick="window.location.replace('/calendar/1')" type="button" class="button" style="width: 49%; margin-left: auto; margin-right: auto;">
+
+                <span>Poprzedni tydzień</span>
+                <span class="icon">
+                  <i class="fas fa-arrow-left"></i>
+                </span>
+              </button>
+
+            
+              <button onClick="window.location.replace('/calendar/-1')" type="button" class="button" style="width: 50%; margin-left: auto; margin-right: auto;">
+                <span class="icon">
+                  <i class="fas fa-arrow-right"></i>
+                </span>
+                <span>Następny tydzień</span>
+              </button>                      
             </div>
   </body>
 </html>
