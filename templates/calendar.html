@@ -26,12 +26,20 @@
 
             <div class="container">         
                 <div class="box main" style="min-width: 1000px; margin-top: 10px;">
+                  <div class="box">
+                  Umówione wizyty:
+                  {% if credentials != "doctor" %}
+                  {% for dates in appointments %}
+                  <button style="margin-bottom: 10px;"class="button is-success is-static is-large is-fullwidth">{{dates[0]}}</button>
+                  {% endfor %}
+                  {% endif%}
+                  </div>
                   <form method="POST">
                   <div class="columns">
                     {% for n in range(7) %}
                     <div class="column">
                       {% for j in range(16) %}
-                      
+                     
                         {% if j == 0 %}
                         <span class="button is-static">
                           {{days_names[n]}} <br>
@@ -39,13 +47,17 @@
                           </span>
                         {% endif %}
                         {% if year|string + "-" + month|string + "-" + week_for_display[n]|string + " " + hours_per_day[j]|string + ":00" in list_of_reserved_dates %}
-                        <button type="submit" name="patient_on_this_time" value="{{year}}-{{month}}-{{week_for_display[n]}} {{hours_per_day[j]}}:00" class="button is-danger is-fullwidth">{{hours_per_day[j]}}</button>
+                          {% if credentials == 'doctor' %}
+                          <button type="submit" name="patient_on_this_time" value="{{year}}-{{month}}-{{week_for_display[n]}} {{hours_per_day[j]}}:00" class="button is-danger is-fullwidth">{{hours_per_day[j]}}</button>
+                          {% else %}
+                          <button type="submit" name="patient_on_this_time" value="{{year}}-{{month}}-{{week_for_display[n]}} {{hours_per_day[j]}}:00" class="button is-danger is-fullwidth" disabled>{{hours_per_day[j]}}</button>
+                          {% endif %}
                         {% else %}
-                        {% if credentials == 'doctor' %}
-                        <button type="submit" name="hourchoice" value="{{year}}-{{month}}-{{week_for_display[n]}} {{hours_per_day[j]}}:00" class="button is-static is-fullwidth">{{hours_per_day[j]}}</button>
-                        {% else %}
-                        <button type="submit" name="hourchoice" value="{{year}}-{{month}}-{{week_for_display[n]}} {{hours_per_day[j]}}:00" class="button is-fullwidth">{{hours_per_day[j]}}</button>
-                        {% endif %}
+                          {% if credentials == 'doctor' %}
+                          <button type="submit" name="hourchoice" value="{{year}}-{{month}}-{{week_for_display[n]}} {{hours_per_day[j]}}:00" class="button is-static is-fullwidth">{{hours_per_day[j]}}</button>
+                          {% else %}
+                          <button type="submit" name="hourchoice" value="{{year}}-{{month}}-{{week_for_display[n]}} {{hours_per_day[j]}}:00" class="button is-fullwidth">{{hours_per_day[j]}}</button>
+                          {% endif %}
                         {% endif %}
                         
                       {% endfor %}

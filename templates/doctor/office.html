@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
     <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/myedits.css') }}" />
-
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/table.css') }}" />
 </head>
 
 <body>
@@ -82,15 +82,78 @@
 
                         <div class="field">
                             <p class="control">
-                                <button type="submit" class="button is-info is-fullwidth">
+                                <button type="submit" name="office" class="button is-info is-fullwidth">
                                       Zapisz zmiany
                                 </button>
                             </p>
                         </div>
-                    </form>
-    
-    
+                    
+                
+                    <div class="box main" style="max-width: 700px; margin-top: 10px;">
+                        <div class="field">
+                            <label class="label">Dodawanie usługi do gabinetu</label>
+                            <div class="columns">
+                                <div class="column">
+                                    <div class="control has-icons-left">
+                                        <input class="input" type="text" name="service_name" placeholder="Nazwa usługi np. wyrywanie zęba" value="">
+                                        <span class="icon is-small is-left">
+                                            <i class="fas fa-teeth"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="column is-one-quarter">
+                                    <div class="control has-icons-left">
+                                        <input class="input" type="text" name="service_cost" placeholder="Koszt w PLN" value="">
+                                        <span class="icon is-small is-left">
+                                            <i class="fas fa-hand-holding-usd"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <p class="control">
+                                    <button type="submit" name = "service" class="button is-info is-light is-fullwidth">
+                                          Dodaj usługę
+                                    </button>
+                                </p>
+                            </div>
+                            <div class="columns">
+                                <div class="column is-one-quarter">
+                                    <div class="control has-icons-left">
+                                        <input class="input" type="text" name="service_id_delete" placeholder="ID" value="">
+                                        <span class="icon is-small is-left">
+                                            <i class="far fa-trash-alt"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="column ">
+                                    <div class="field">
+                                        <p class="control">
+                                            <button type="submit" name = "service_delete" class="button is-danger is-light is-fullwidth">
+                                                  Usuń usługę po ID
+                                            </button>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <table id="myTable">
+                    <tr class="header">
+                      <th style="width: 10%;">ID</th>
+                      <th style="width: 75%;">Usługa</th>
+                      <th style="width: 15%;">Cena</th>
+                    </tr>
+                    {% for row in list_services %}
+                      {% for cell in row %}
+                      <td>{{cell}}</td>
+                      {% endfor %}
+                    </tr>
+                    {% endfor %}
+                  </table> 
                 </div>
+                
             </div>
     </section>
   </body>

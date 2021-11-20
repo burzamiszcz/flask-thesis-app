@@ -19,6 +19,8 @@ import calendar
 import pprint
 from datetime import date, timedelta, datetime
 
+from werkzeug.datastructures import auth_property
+
 def day_in_polish(id):
     if id == 1: return 'poniedziałek'
     elif id == 2: return 'wtorek'
@@ -126,22 +128,47 @@ def office():
     for row in office.fetchall():
         list_office.append(row)
     print(list_office)
+    list_services = []
+    services_list = c.execute(f'SELECT * FROM services')
+    for row in services_list.fetchall():
+        list_services.append(row)
 
     if request.method == "POST":
-        name = request.form['name']
-        city = request.form['city']
-        street = request.form['street']
-        street_number = request.form['street_number']
-        phone_number = request.form['phone_number']
-        email = request.form['email']
-        conn = sqlite3.connect('databases/database.db')
-        c = conn.cursor()
-        c.execute(f'DELETE FROM office')
-        conn.commit()
-        c.execute(f'INSERT INTO office VALUES (\'{name}\', \'{city}\', \'{street}\',\'{street_number}\', \'{phone_number}\', \'{email}\')')
-        conn.commit()
-        conn.close()
-    return render_template('doctor/office.html', username=session['username'], list_office=list_office[0], credentials = session['credentials'], id = session['id'] )
+        if 'office' in request.form:
+            name = request.form['name']
+            city = request.form['city']
+            street = request.form['street']
+            street_number = request.form['street_number']
+            phone_number = request.form['phone_number']
+            email = request.form['email']
+            conn = sqlite3.connect('databases/database.db')
+            c = conn.cursor()
+            c.execute(f'DELETE FROM office')
+            conn.commit()
+            c.execute(f'INSERT INTO office VALUES (\'{name}\', \'{city}\', \'{street}\',\'{street_number}\', \'{phone_number}\', \'{email}\')')
+            conn.commit()
+            conn.close()
+            return redirect(url_for('office'))
+        elif 'service' in request.form:
+            service_name = request.form['service_name']
+            service_cost = request.form['service_cost']
+            conn = sqlite3.connect('databases/database.db')
+            c = conn.cursor()
+            c.execute(f"INSERT INTO services (name, cost) VALUES ('{service_name}', '{service_cost}')")
+            conn.commit()
+            conn.close()
+            return redirect(url_for('office'))
+        elif 'service_id_delete' in request.form:
+            id_to_delete = request.form['service_id_delete']
+            print(id_to_delete)
+            c.execute(f"DELETE FROM services WHERE id = {id_to_delete}")
+            conn.commit()
+            conn.close()
+            return redirect(url_for('office'))
+    if session['credentials'] == 'patient':
+        return render_template('patient/office.html', username=session['username'], list_office=list_office[0], credentials = session['credentials'], id = session['id'], list_services = list_services)
+    else: 
+        return render_template('doctor/office.html', username=session['username'], list_office=list_office[0], credentials = session['credentials'], id = session['id'], list_services = list_services)
         
 
 @app.route('/add_patients', methods=['POST', 'GET'])
@@ -413,7 +440,7 @@ def list_box_id(id):
 def calendar_sign(delta):
     if request.method == "POST":
         delta = 3
-    print('delta session = ', session['delta'])
+    # print('delta session = ', session['delta'])
     if int(delta) != 3:
         if int(delta) == 0 or not session['delta']:
             session['delta'] = 0
@@ -425,18 +452,24 @@ def calendar_sign(delta):
 
     conn = sqlite3.connect('databases/database.db')
     c = conn.cursor()
-    current_month_days = c.execute(f"SELECT * FROM calendar WHERE strftime('%m', date) = '{today.split('-')[1]}' AND strftime('%Y', date) = '{today.split('-')[0]}'")
+    current_month_days = c.execute(f'''SELECT calendar.date, calendar.patient_id, persons.name, persons.surname FROM calendar
+                                        LEFT JOIN persons
+                                        on calendar.patient_id = persons.id
+                                        WHERE strftime('%m', date) = '{today.split('-')[1]}' AND strftime('%Y', date) = '{today.split('-')[0]}' ''')
+
     list_of_reserved_dates = []
+    list_of_reserved_dates_who = []
     for elem in current_month_days:
         list_of_reserved_dates.append(elem[0])
-    # print(list_of_reserved_dates)
+        list_of_reserved_dates_who.append(str(elem[2]) + str(elem[3]))
     for week in calendar.monthcalendar(int(year), int(month)):
         if int(today.split('-')[2]) in week:
             week_now = calendar.monthcalendar(int(year), int(month)).index(week)
 
-    # print(week_now)
-
-    # print(calendar.monthcalendar(2021,11))
+    appointments = c.execute(f"SELECT * FROM calendar WHERE patient_id = {session['id']} AND date >= '{today_date()}' ORDER BY date")
+    appointments = appointments.fetchall()
+    for elem in appointments:
+        print(elem)
 
     days_names = []
     for i in range(7):
@@ -450,26 +483,37 @@ def calendar_sign(delta):
             hours_per_day.append(f'{i+8}:00')
             hours_per_day.append(f'{i+8}:30')
 
-        
+    # conn = sqlite3.connect('databases/database.db')
+    # c = conn.cursor()
+    
     week_for_display = calendar.monthcalendar(int(year), int(month))[week_now]
-    print(week_for_display)
     for i in range(len(week_for_display)):
         if week_for_display[i] < 10:
             week_for_display[i] = "0" + str(week_for_display[i])
-    print(week_for_display)
 
 
+    # conn.close()
+
+    # appointments = []
     if request.method == "POST":
-        date_choice = request.form['hourchoice']
-        # print(date_choice)
-        conn = sqlite3.connect('databases/database.db')
-        c = conn.cursor()
-        c.execute(f"INSERT INTO calendar VALUES ('{date_choice}', 1)")
-        conn.commit()
-        return redirect(url_for('calendar_sign', delta=3))
+        print(request.form)
+        if 'hourchoice' in request.form:
+            date_choice = request.form['hourchoice']
+            conn = sqlite3.connect('databases/database.db')
+            c = conn.cursor()
+            c.execute(f"INSERT INTO calendar VALUES ('{date_choice}', {session['id']})")
+            conn.commit()
+            return redirect(url_for('calendar_sign', delta=3))
+        if 'patient_on_this_time' in request.form:
+            date_choice = request.form['patient_on_this_time']
+            # print(date_choice)
+            conn = sqlite3.connect('databases/database.db')
+            c = conn.cursor()
+            patient_id_on_this_date = c.execute(f'''SELECT patient_id
+                                                FROM calendar
+                                                WHERE date = '{date_choice}' ''')
+        
+            return redirect(url_for('patient_info', patient_id = patient_id_on_this_date.fetchone()[0]))
 
-    return render_template('doctor/calendar.html', credentials = session['credentials'], id = session['id'], username=session['username'], week_now = week_now, days_names = days_names, hours_per_day = hours_per_day, week_for_display = week_for_display, month = month, year = year, list_of_reserved_dates = list_of_reserved_dates)
+    return render_template('calendar.html', credentials = session['credentials'], id = session['id'], username=session['username'], week_now = week_now, days_names = days_names, hours_per_day = hours_per_day, week_for_display = week_for_display, month = month, year = year, list_of_reserved_dates = list_of_reserved_dates, appointments = appointments)
 
-@app.route('/test', methods = ['GET', 'POST'])
-def test():
-    return render_template('doctor/calendar.html', username=session['username'])

@@ -15,13 +15,13 @@
                             </span>
                                     </span>
                         <span class="navbar-item">
-                            <a href="/start" class="button is-info is-inverted">
+                            <a href="{{ url_for('office', username=username) }}" class="button is-info is-inverted">
                                 <span>Cennik</span>
                              </a>
                         </span>
 
                         <span class="navbar-item">
-                            <a href="/myprofile" class="button is-info is-inverted">
+                            <a href="{{ url_for('calendar_sign', delta=0, username=username) }}" class="button is-info is-inverted">
                                 <span>Zaplanowane wizyty</span>
                            </a>
                         </span>

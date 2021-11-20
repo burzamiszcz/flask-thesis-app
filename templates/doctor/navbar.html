@@ -21,7 +21,7 @@
                         </span>
 
                         <span class="navbar-item">
-                            <a href="/myprofile" class="button is-info is-inverted">
+                            <a href="{{ url_for('calendar_sign', delta=0, username=username) }}" class="button is-info is-inverted">
                                 <span>Zaplanowane wizyty</span>
                            </a>
                         </span>
@@ -47,11 +47,11 @@
                             </div>
                           </div>
 
-                        <span class="navbar-item">
+                        <!-- <span class="navbar-item">
                             <a href="/myprofile" class="button is-info is-inverted">
                                 <span>Grafik zmian</span>
                            </a>
-                        </span>
+                        </span> -->
                         
                         <span class="navbar-item">
                             <a href="{{ url_for('list_box', username=username) }}" class="button is-info is-inverted">
